@@ -1,10 +1,5 @@
-# import the necessary packages
 from scipy.spatial import distance as dist
-from imutils.video import FileVideoStream
-from imutils.video import VideoStream
 from imutils import face_utils
-import argparse
-import imutils
 import time
 import dlib
 import cv2
@@ -28,33 +23,19 @@ def eye_aspect_ratio(eye):
     return ear
 
 
-# construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("flask")
-ap.add_argument("-p", "--shape-predictor", default="C:/Projects/arcafe/arcafe/mytools/shape_predictor_68_face_landmarks.dat",
-                help="path to facial landmark predictor")
-ap.add_argument("-v", "--video", type=str, default="camera",
-                help="path to input video file")
-ap.add_argument("-t", "--threshold", type=float, default=0.27,
-                help="threshold to determine closed eyes")
-ap.add_argument("-f", "--frames", type=int, default=2,
-                help="the number of consecutive frames the eye must be below the threshold")
-
-
 def main():
-    args = vars(ap.parse_args())
-    EYE_AR_THRESH = args['threshold']
-    EYE_AR_CONSEC_FRAMES = args['frames']
+    capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라 또는 외장 카메라에서 영상을 받아오기
+    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # capture.set(option, n), 카메라의 속성을 설정
+    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
 
-    # initialize the frame counters and the total number of blinks
-    COUNTER = 0
-    TOTAL = 0
+    EYE_AR_THRESH = 0.27
+    SHAPE_PREDICTOR = "shape_predictor_68_face_landmarks.dat"
 
     # initialize dlib's face detector (HOG-based) and then create
     # the facial landmark predictor
     print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(args["shape_predictor"])
+    predictor = dlib.shape_predictor(SHAPE_PREDICTOR)
 
     # grab the indexes of the facial landmarks for the left and
     # right eye, respectively
@@ -64,40 +45,20 @@ def main():
     # start the video stream thread
     print("[INFO] starting video stream thread...")
     print("[INFO] print q to quit...")
-    if args['video'] == "camera":
-        vs = VideoStream(src=0).start()
-        fileStream = False
-    else:
-        vs = FileVideoStream(args["video"]).start()
-        fileStream = True
-
-    time.sleep(1.0)
 
     lastBlinkTime = time.time()
-    lastWarnedTime = time.time()
+    lastAlarmedTime = time.time()
 
     # loop over frames from the video stream
     while True:
-        # if this is a file video stream, then we need to check if
-        # there any more frames left in the buffer to process
-        if fileStream and not vs.more():
-            break
-
-        # grab the frame from the threaded video file stream, resize
-        # it, and convert it to grayscale
-        # channels)
-        frame = vs.read()
-        frame = imutils.resize(frame, width=450)
+        eyeOpenedTime = time.time() - lastBlinkTime
+        ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        try:
+            rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
 
-        # detect faces in the grayscale frame
-        rects = detector(gray, 0)
-
-        # loop over the face detections
-        for rect in rects:
             # determine the facial landmarks for the face region, then
-            # convert the facial landmark (x, y)-coordinates to a NumPy
-            # array
+            # convert the facial landmark (x, y)-coordinates to a NumPy array
             shape = predictor(gray, rect)
             shape = face_utils.shape_to_np(shape)
 
@@ -108,57 +69,44 @@ def main():
             leftEAR = eye_aspect_ratio(leftEye)
             rightEAR = eye_aspect_ratio(rightEye)
 
-            # average the eye aspect ratio together for both eyes
-            ear = (leftEAR + rightEAR) / 2.0
+            ear = (leftEAR + rightEAR) / 2.0  # average the eye aspect ratio together for both eyes
 
             # check to see if the eye aspect ratio is below the blink
-            # threshold, and if so, increment the blink frame counter
             if ear < EYE_AR_THRESH:
                 lastBlinkTime = time.time()
-                COUNTER += 1
 
-            # otherwise, the eye aspect ratio is not below the blink
-            # threshold
-            else:
-                # if the eyes were closed for a sufficient number of
-                # then increment the total number of blinks
-                if COUNTER >= EYE_AR_CONSEC_FRAMES:
-                    TOTAL += 1
-
-                # reset the eye frame counter
-                COUNTER = 0
-
-            warningTime = time.time() - lastBlinkTime
-            # draw the total number of blinks on the frame along with
-            # the computed eye aspect ratio for the frame
-            cv2.putText(frame, "Blinks: {}".format(TOTAL), (10, 30),
+            cv2.putText(frame, "Time: {:.0f}".format(eyeOpenedTime), (300, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(frame, "Time: {:.0f}".format(warningTime), (300, 30),
+            cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(frame, "Press 'q' to Exit".format(warningTime), (10, 300),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            if warningTime > 10:
-                cv2.putText(frame, "WARNING Blink Eyes!", (200, 300),
+            if eyeOpenedTime > 10:
+                cv2.putText(frame, "WARNING Blink Eyes!", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-            if warningTime > 20 and (time.time() - lastWarnedTime > 5):
+            if eyeOpenedTime > 20 and (time.time() - lastAlarmedTime > 5):
                 duration = 1000  # milliseconds
                 freq = 440  # Hz
                 winsound.Beep(freq, duration)
-                lastWarnedTime = time.time()
+                lastAlarmedTime = time.time()
 
+        except IndexError:  # when no face is detected
+            if eyeOpenedTime > 15:
+                lastBlinkTime = time.time()
+            cv2.putText(frame, "Time: {:.0f}".format(eyeOpenedTime), (300, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+            cv2.putText(frame, "Press 'q' to Exit", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+            cv2.putText(frame, "No Face Detected", (10, 60),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-        # show the frame
-        cv2.imshow("Frame", frame)
-        key = cv2.waitKey(1) & 0xFF
+        cv2.imshow("VideoFrame", frame)
+        key = cv2.waitKey(33)
 
-        # if the `q` key was pressed, break from the loop
-        if key == ord("q"):
+        if key == ord("q"):  # if the `q` key was pressed, break from the loop
             break
 
-    # do a bit of cleanup
+    capture.release()  # do a bit of cleanup
     cv2.destroyAllWindows()
-    vs.stop()
 
 
 if __name__ == '__main__':
