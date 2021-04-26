@@ -4,6 +4,7 @@ import time
 import dlib
 import cv2
 import winsound
+from arcafe.config import BASE_DIR
 
 
 def eye_aspect_ratio(eye):
@@ -29,7 +30,7 @@ def main():
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
 
     EYE_AR_THRESH = 0.27
-    SHAPE_PREDICTOR = "shape_predictor_68_face_landmarks.dat"
+    SHAPE_PREDICTOR = f"{BASE_DIR}/mytools/shape_predictor_68_face_landmarks.dat"
 
     # initialize dlib's face detector (HOG-based) and then create
     # the facial landmark predictor
