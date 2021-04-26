@@ -135,8 +135,10 @@ def main():
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             cv2.putText(frame, "Time: {:.0f}".format(warningTime), (300, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+            cv2.putText(frame, "Press 'q' to Exit".format(warningTime), (10, 300),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             if warningTime > 10:
-                cv2.putText(frame, "WARNING Blink Eyes!", (150, 300),
+                cv2.putText(frame, "WARNING Blink Eyes!", (200, 300),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
             if warningTime > 20 and (time.time() - lastWarnedTime > 5):
