@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
-from arcafe.mytools import detect_blinks
+from mytools import detect_blinks
 from threading import Thread
 import time
 

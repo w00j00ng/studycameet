@@ -4,8 +4,8 @@ import time
 import dlib
 import cv2
 import winsound
-from arcafe.config import BASE_DIR
-from ..views import nagbot_views
+from config import BASE_DIR
+from arcafe.views import nagbot_views
 
 
 def eye_aspect_ratio(eye):

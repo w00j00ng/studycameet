@@ -1,5 +1,5 @@
 from flask import Flask
-from arcafe import config
+import config
 
 
 def create_app():
