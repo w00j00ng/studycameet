@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>
+<div class="post-form my-3 ml-3">
     <h2>버튼을 누르면 잔소리가 시작됩니다</h2>
     <h2>잔소리를 끄시려면 비디오 화면을 선택하고 'q'를 눌러주세요</h2>
 </div>
@@ -9,9 +9,11 @@
         <button type="submit" class="btn btn-primary my-2">시작하기</button>
     </form>
 </div>
-<div>
-    {% if status %}
-        <h4>STATUS: {{ status }}</h4>
-    {% endif %}
+<div class="post-form my-3 ml-3">
+    <h4>총 시간: {{ '%0.2f' % operationTime | float }} 초</h4>
+    <h4>가장 오래 깜빡이지 않은 시간: {{ '%0.2f' % longestOpenedTime | float }} 초</h4>
+    <h4>눈 깜빡인 횟수: {{ blinkCount }}</h4>
+    <h4>경고 횟수: {{ warningCount }}</h4>
+    <h4>알람 횟수: {{ alertCount }}</h4>
 </div>
 {% endblock %}
