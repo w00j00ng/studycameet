@@ -10,10 +10,8 @@
     </form>
 </div>
 <div>
-    {% if blinkCount > 0 %}
-        <h4>총 시간: {{ '%0.2f' % operationTime | float }} 초</h4>
-        <h4>가장 오래 깜빡이지 않은 시간: {{ '%0.2f' % longestOpenedTime | float }} 초</h4>
-        <h4>눈 깜빡인 횟수: {{ blinkCount }}</h4>
+    {% if status %}
+        <h4>STATUS: {{ status }}</h4>
     {% endif %}
 </div>
 {% endblock %}
