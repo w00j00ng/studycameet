@@ -5,7 +5,7 @@ from threading import Thread
 bp = Blueprint('nagbot', __name__, url_prefix='/nagbot/')
 
 
-@bp.route('/index/')
+@bp.route('/')
 def index():
     return render_template('nagbot/index.html')
 
@@ -14,4 +14,6 @@ def index():
 def execute():
     thread = Thread(target=detect_blinks.main())
     thread.start()
+    thread.join()
     return redirect(url_for('nagbot.index'))
+
