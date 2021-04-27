@@ -5,6 +5,7 @@ import dlib
 import cv2
 import winsound
 from arcafe.config import BASE_DIR
+from ..views import nagbot_views
 
 
 def eye_aspect_ratio(eye):
@@ -30,6 +31,10 @@ def main():
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
 
     EYE_AR_THRESH = 0.27
+    EYE_AR_CONSEC_FRAMES = 2
+    COUNTER = 0
+    TOTAL = 0
+
     SHAPE_PREDICTOR = f"{BASE_DIR}/mytools/shape_predictor_68_face_landmarks.dat"
 
     # initialize dlib's face detector (HOG-based) and then create
@@ -49,6 +54,8 @@ def main():
 
     lastBlinkTime = time.time()
     lastAlarmedTime = time.time()
+
+    bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
 
     # loop over frames from the video stream
     while True:
@@ -77,31 +84,41 @@ def main():
 
             # check to see if the eye aspect ratio is below the blink
             if ear < EYE_AR_THRESH:
-                lastBlinkTime = time.time()
+                COUNTER += 1
+            else:
+                # if the eyes were closed for a sufficient number of
+                # then increment the total number of blinks
+                if COUNTER >= EYE_AR_CONSEC_FRAMES:
+                    TOTAL += 1
+                    COUNTER = 0
+                    lastBlinkTime = time.time()
+                    nagbot_views.blink()
+                    bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
 
             cv2.putText(frame, "Time: {:.0f}".format(eyeOpenedTime), (300, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             if eyeOpenedTime > 10:
-                cv2.putText(frame, "WARNING Blink Eyes!", (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                if not bWarningBefore:
+                    nagbot_views.warning()
+                    bWarningBefore, bAlertBefore, bNoFaceBefore = True, False, False
 
             if eyeOpenedTime > 20 and (time.time() - lastAlarmedTime > 5):
                 duration = 1000  # milliseconds
                 freq = 440  # Hz
                 winsound.Beep(freq, duration)
+                if not bAlertBefore:
+                    nagbot_views.alert()
+                    bWarningBefore, bAlertBefore, bNoFaceBefore = False, True, False
                 lastAlarmedTime = time.time()
 
         except IndexError:  # when no face is detected
+            if not bNoFaceBefore:
+                bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, True
+                nagbot_views.noface()
             if eyeOpenedTime > 15:
                 lastBlinkTime = time.time()
-            cv2.putText(frame, "Time: {:.0f}".format(eyeOpenedTime), (300, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(frame, "Press 'q' to Exit", (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(frame, "No Face Detected", (10, 60),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
         cv2.imshow("VideoFrame", frame)
         key = cv2.waitKey(33)

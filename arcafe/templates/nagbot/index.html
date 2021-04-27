@@ -9,4 +9,9 @@
         <button type="submit" class="btn btn-primary my-2">시작하기</button>
     </form>
 </div>
+<div>
+    {% if status %}
+        <h4>STATUS: {{ status }}</h4>
+    {% endif %}
+</div>
 {% endblock %}

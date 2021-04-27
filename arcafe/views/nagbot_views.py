@@ -17,3 +17,26 @@ def execute():
     thread.join()
     return redirect(url_for('nagbot.index'))
 
+
+@bp.route('/blink/', methods=["POST"])
+def blink():
+    print("Blink")
+    return redirect(url_for('nagbot.index'))
+
+
+@bp.route('/warning/', methods=["POST"])
+def warning():
+    print("Warning")
+    return redirect(url_for('nagbot.index'))
+
+
+@bp.route('/alert/', methods=["POST"])
+def alert():
+    print("Alert")
+    return redirect(url_for('nagbot.index'))
+
+
+@bp.route('/noface/', methods=["POST"])
+def noface():
+    print("No Face Detected")
+    return redirect(url_for('nagbot.index'))
