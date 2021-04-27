@@ -54,7 +54,10 @@ def main():
     while True:
         eyeOpenedTime = time.time() - lastBlinkTime
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        try:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        except cv2.error:
+            break
         try:
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
 
