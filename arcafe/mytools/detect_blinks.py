@@ -100,6 +100,8 @@ def main():
             cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             if eyeOpenedTime > 10:
+                cv2.putText(frame, "WARNING Blink Eyes!", (10, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                 if not bWarningBefore:
                     nagbot_views.warning()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = True, False, False

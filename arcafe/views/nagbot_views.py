@@ -25,11 +25,12 @@ def index():
 
 @bp.route('/execute/', methods=['POST'])
 def execute():
-    global startTime, prevBlinkTime, lastBlinkTime, longestOpenedTime
+    global startTime, prevBlinkTime, lastBlinkTime, longestOpenedTime, blinkCount
     startTime = time.time()
     prevBlinkTime = time.time()
     lastBlinkTime = time.time()
     longestOpenedTime = 0
+    blinkCount = 0
     thread = Thread(target=detect_blinks.main())
     thread.start()
     thread.join()
@@ -39,14 +40,16 @@ def execute():
 @bp.route('/blink/', methods=["POST"])
 def blink():
     global blinkCount, prevBlinkTime, lastBlinkTime, longestOpenedTime
+    nowTime = time.time()
     print("Blink")
     if blinkCount == 0:
-        prevBlinkTime = time.time()
-    lastBlinkTime = time.time()
+        prevBlinkTime = nowTime
+        longestOpenedTime = nowTime - startTime
+    lastBlinkTime = nowTime
     blinkCount += 1
     if lastBlinkTime - prevBlinkTime > longestOpenedTime:
         longestOpenedTime = lastBlinkTime - prevBlinkTime
-    prevBlinkTime = time.time()
+    prevBlinkTime = nowTime
     return redirect(url_for('nagbot.index'))
 
 
