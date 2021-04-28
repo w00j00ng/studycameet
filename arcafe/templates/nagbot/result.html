@@ -11,20 +11,20 @@
         <button type="submit" class="btn btn-primary my-2">시작하기</button>
     </form>
 </div>
-<div class="col-sm-4">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h4 class="panel-title">결과</h4>
-        </div>
-        <div class="panel-body">
-            <ul class="list-group">
-                <li class="list-group-item">총 시간: {{ '%0.2f' % operationTime | float }} 초</li>
-                <li class="list-group-item">가장 오래 깜빡이지 않은 시간: {{ '%0.2f' % longestOpenedTime | float }} 초</li>
-                <li class="list-group-item">눈 깜빡인 횟수: {{ blinkCount }}</li>
-                <li class="list-group-item">경고 횟수: {{ warningCount }}</li>
-                <li class="list-group-item">알람 횟수: {{ alertCount }}</li>
-            </ul>
-        </div>
-    </div>
+<div class="col-md-3">
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>항목</th><th>시간</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>총 시간</td><td>{{ '%0.2f' % operationTime | float }} 초</td></tr>
+      <tr><td>가장 오래 깜빡이지 않은 시간</td><td>{{ '%0.2f' % longestOpenedTime | float }} 초</td></tr>
+      <tr><td>눈 깜빡인 횟수</td><td>{{ blinkCount }}</td></tr>
+      <tr><td>경고 횟수</td><td>{{ warningCount }}</td></tr>
+      <tr><td>알람 횟수</td><td>{{ alertCount }}</td></tr>
+    </tbody>
+  </table>
 </div>
 {% endblock %}
