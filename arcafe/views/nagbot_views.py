@@ -64,7 +64,7 @@ def warning():
 
 @bp.route('/alert/', methods=["POST"])
 def alert():
-    global blinkCount, lastBlinkTime
+    global blinkCount, lastBlinkTime, alertCount
     alertCount += 1
     print("Alert")
     return redirect(url_for('nagbot.index'))
