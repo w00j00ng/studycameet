@@ -10,6 +10,17 @@
     <form action="{{url_for('nagbot.execute')}}" method="post" class="post-form my-3 ml-3">
         <button type="submit" class="btn btn-primary">시작하기</button>
     </form>
+    {% if g.user %}
+        <form action="{{url_for('nagbot.upload')}}" method="post" class="post-form my-3 ml-3">
+            <input type="hidden" name="username" value="{{g.user.username}}">
+            <input type="hidden" name="operationTime" value="{{operationTime|round(1, 'ceil')}}">
+            <input type="hidden" name="longestOpenedTime" value="{{longestOpenedTime|round(1, 'ceil')}}">
+            <input type="hidden" name="blinkCount" value={{blinkCount}}>
+            <input type="hidden" name="warningCount" value={{warningCount}}>
+            <input type="hidden" name="alertCount" value={{alertCount}}>
+            <button type="submit" class="btn btn-primary">등록하기</button>
+        </form>
+    {% endif %}
 </div>
 <div class="col-md-3">
   <table class="table table-condensed">
@@ -19,8 +30,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td>총 시간</td><td>{{ '%0.2f' % operationTime | float }} 초</td></tr>
-      <tr><td>가장 오래 깜빡이지 않은 시간</td><td>{{ '%0.2f' % longestOpenedTime | float }} 초</td></tr>
+      <tr><td>총 시간</td><td>{{operationTime|round(1, 'ceil')}} 초</td></tr>
+      <tr><td>가장 오래 깜빡이지 않은 시간</td><td>{{longestOpenedTime|round(1, 'ceil')}} 초</td></tr>
       <tr><td>눈 깜빡인 횟수</td><td>{{ blinkCount }} 회</td></tr>
       <tr><td>경고 횟수</td><td>{{ warningCount }} 회</td></tr>
       <tr><td>알람 횟수</td><td>{{ alertCount }} 회</td></tr>

@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+arcafe.db
 
 # C extensions
 *.so

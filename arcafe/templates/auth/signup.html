@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-3">
+    <form method="post" class="post-form">
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
+
+        {{ form.username.label }} (5 ~ 25자)
+        {{ form.username(class='form-control') }}
+
+        {{ form.password1.label }}
+        {{ form.password1(class='form-control') }}
+
+        {{ form.password2.label }}
+        {{ form.password2(class='form-control') }}
+
+        {{ form.email.label }}
+        {{ form.email(class='form-control') }}
+        <button type="submit" class="btn btn-primary my-3">생성하기</button>
+    </form>
+</div>
+{% endblock %}
