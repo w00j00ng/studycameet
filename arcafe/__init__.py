@@ -15,10 +15,11 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from .views import main_views, nagbot_views, auth_views
+    from .views import main_views, nagbot_views, auth_views, mydata_views
 
     app.register_blueprint(main_views.bp)
     app.register_blueprint(nagbot_views.bp)
     app.register_blueprint(auth_views.bp)
+    app.register_blueprint(mydata_views.bp)
 
     return app
