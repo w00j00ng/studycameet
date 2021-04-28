@@ -6,19 +6,19 @@ import time
 
 bp = Blueprint('nagbot', __name__, url_prefix='/nagbot/')
 
-startTime, prevBlinkTime, lastBlinkTime, longestOpenedTime = 0, 0, 0, 0
+startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime = 0, 0, 0, 0, 0
 blinkCount, warningCount, alertCount = 0, 0, 0
 
 
 @bp.route('/')
 def index():
-    global startTime, longestOpenedTime
+    global startTime, endTime, longestOpenedTime
     global blinkCount, warningCount, alertCount
 
     if longestOpenedTime == 0:
         return render_template('nagbot/index.html')
 
-    operationTime = time.time() - startTime
+    operationTime = endTime - startTime
     return render_template('nagbot/result.html',
                            operationTime=operationTime, longestOpenedTime=longestOpenedTime,
                            blinkCount=blinkCount, warningCount=warningCount, alertCount=alertCount)
@@ -26,7 +26,7 @@ def index():
 
 @bp.route('/execute/', methods=['POST'])
 def execute():
-    global startTime, prevBlinkTime, lastBlinkTime, longestOpenedTime
+    global startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime
     global blinkCount, warningCount, alertCount
     startTime = time.time()
     prevBlinkTime, lastBlinkTime = startTime, startTime
@@ -35,6 +35,7 @@ def execute():
     thread = Thread(target=detect_blinks.main())
     thread.start()
     thread.join()
+    endTime = time.time()
     return redirect(url_for('nagbot.index'))
 
 
