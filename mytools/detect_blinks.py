@@ -90,10 +90,10 @@ def main():
                 # then increment the total number of blinks
                 if COUNTER >= EYE_AR_CONSEC_FRAMES:
                     TOTAL += 1
-                    COUNTER = 0
                     lastBlinkTime = time.time()
                     nagbot_views.blink()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
+                COUNTER = 0
 
             cv2.putText(frame, "Time: {:.0f}".format(eyeOpenedTime), (300, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
