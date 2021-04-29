@@ -101,8 +101,6 @@ def blink():
     if blinkCount == 0:
         prevBlinkTime = lastBlinkTime
         longestOpenedTime = lastBlinkTime - startTime
-    else:
-        prevBlinkTime = lastBlinkTime
     blinkCount += 1
     if lastBlinkTime - prevBlinkTime > longestOpenedTime:
         longestOpenedTime = lastBlinkTime - prevBlinkTime
