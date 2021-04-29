@@ -29,6 +29,26 @@ def mydata():
     return render_template('mydata/index.html', result=all_rows)
 
 
+@bp.route('/bydate/')
+def bydate():
+    global mydataList
+    query_mydata = db.engine.execute(f"SELECT 'id'"
+                                     f"     , 'username'"
+                                     f'     , SUM(operationTime)'
+                                     f'     , SUM(totalWorkingTime)'
+                                     f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100'
+                                     f'     , SUM(blinkCount)'
+                                     f'     , SUM(warningCount)'
+                                     f'     , SUM(alertCount)'
+                                     f'     , create_date '
+                                     f'FROM usage_02 '
+                                     f'WHERE username = "{g.user.username}" '
+                                     f'GROUP BY create_date')
+    all_rows = [row for row in query_mydata]
+    print(all_rows)
+    return render_template('mydata/bydate.html', result=all_rows)
+
+
 @bp.route('/detail/')
 def detail():
     global mydataList

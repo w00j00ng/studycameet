@@ -3,6 +3,19 @@
 <div class="post-form my-3 ml-3">
     <p>{{ g.user.username }}님 환영합니다</p>
 </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <a class="navbar-brand" href="{{url_for('main.index') }}">처음으로</a>
+    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('mydata.mydata') }}">전체보기</a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('mydata.bydate') }}">날짜별보기</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div class="col-md-8">
     <table class="table table-striped">
         <thead>
