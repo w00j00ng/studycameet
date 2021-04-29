@@ -47,7 +47,7 @@ def bydate():
 
 @bp.route('/byweek/')
 def byweek():
-    query_mydata = db.engine.execute(f"SELECT SUM(totalWorkingTime) / SUM(operationTime) * 100 / ROWNUMBER"
+    query_mydata = db.engine.execute(f"SELECT SUM(totalWorkingTime) / SUM(operationTime) * 100"
                                      f'     , SUM(blinkCount) / SUM(totalWorkingTime) * 60'
                                      f'     , SUM(warningCount)/ SUM(totalWorkingTime) * 60'
                                      f'     , SUM(alertCount)/ SUM(totalWorkingTime) * 60'
