@@ -59,7 +59,8 @@ def main():
 
     # loop over frames from the video stream
     while True:
-        eyeOpenedTime = time.time() - lastBlinkTime
+        now_time = time.time()
+        eyeOpenedTime = now_time - lastBlinkTime
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -90,7 +91,7 @@ def main():
                 # then increment the total number of blinks
                 if COUNTER >= EYE_AR_CONSEC_FRAMES:
                     TOTAL += 1
-                    lastBlinkTime = time.time()
+                    lastBlinkTime = now_time
                     nagbot_views.blink()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
                 COUNTER = 0
@@ -106,21 +107,21 @@ def main():
                     nagbot_views.warning()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = True, False, False
 
-            if eyeOpenedTime > 20 and (time.time() - lastAlarmedTime > 5):
+            if eyeOpenedTime > 20 and (now_time - lastAlarmedTime > 5):
                 duration = 1000  # milliseconds
                 freq = 440  # Hz
                 winsound.Beep(freq, duration)
                 if not bAlertBefore:
                     nagbot_views.alert()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = False, True, False
-                lastAlarmedTime = time.time()
+                lastAlarmedTime = now_time
 
         except IndexError:  # when no face is detected
             if not bNoFaceBefore:
                 bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, True
                 nagbot_views.noface()
             if eyeOpenedTime > 15:
-                lastBlinkTime = time.time()
+                lastBlinkTime = now_time
 
         cv2.imshow("VideoFrame", frame)
         key = cv2.waitKey(33)
