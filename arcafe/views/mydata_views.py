@@ -8,9 +8,6 @@ import pandas as pd
 bp = Blueprint('mydata', __name__, url_prefix='/mydata/')
 
 
-mydataList = []
-
-
 @bp.before_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -22,7 +19,6 @@ def load_logged_in_user():
 
 @bp.route('/')
 def mydata():
-    global mydataList
     query_mydata = db.engine.execute(f'SELECT * FROM usage_02 WHERE username = "{g.user.username}" ORDER BY id')
     all_rows = [row for row in query_mydata]
     return render_template('mydata/index.html', result=all_rows)
@@ -30,7 +26,6 @@ def mydata():
 
 @bp.route('/bydate/')
 def bydate():
-    global mydataList
     query_mydata = db.engine.execute(f"SELECT SUM(operationTime) / 60"
                                      f'     , SUM(totalWorkingTime) / 60'
                                      f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100'
