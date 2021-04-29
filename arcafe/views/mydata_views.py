@@ -18,8 +18,20 @@ def load_logged_in_user():
 
 
 @bp.route('/')
-def mydata():
-    return redirect(url_for('mydata.bydate'))
+def index():
+    query_mydata = db.engine.execute(f"SELECT   operationTime / 60"
+                                     f'       , totalWorkingTime / 60'
+                                     f'       , totalWorkingTime / operationTime * 100'
+                                     f'       , blinkCount / totalWorkingTime * 60'
+                                     f'       , warningCount / totalWorkingTime * 60'
+                                     f'       , alertCount/ totalWorkingTime * 60'
+                                     f'       , create_date '
+                                     f'FROM     usage_02 '
+                                     f'WHERE    username = "{g.user.username}" '
+                                     f'ORDER BY id desc')
+    all_rows = [row for row in query_mydata]
+    all_rows = all_rows[:10]
+    return render_template('mydata/index.html', result=all_rows)
 
 
 @bp.route('/bydate/')
