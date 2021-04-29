@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from flask import session, g
 from arcafe.models import User_02
-import time
+
 
 bp = Blueprint('main', __name__, url_prefix='/')
 
@@ -12,11 +12,8 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        try:
-            g.user = User_02.query.get(user_id)
-        except:
-            time.sleep(2)
-            g.user = User_02.query.get(user_id)
+        g.user = User_02.query.get(user_id)
+
 
 @bp.route('/')
 def index():

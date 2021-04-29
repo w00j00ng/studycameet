@@ -19,4 +19,3 @@ class Usage_02(db.Model):
     warningCount = db.Column(db.Integer, nullable=False)
     alertCount = db.Column(db.Integer, nullable=False)
     create_date = db.Column(db.Date(), nullable=False)
-

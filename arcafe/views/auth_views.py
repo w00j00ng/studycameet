@@ -5,7 +5,7 @@ from arcafe.models import User_02
 from werkzeug.security import generate_password_hash, check_password_hash
 from arcafe import db
 import datetime
-import time
+
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
@@ -16,11 +16,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        try:
-            g.user = User_02.query.get(user_id)
-        except:
-            time.sleep(2)
-            g.user = User_02.query.get(user_id)
+        g.user = User_02.query.get(user_id)
 
 
 @bp.route('/login/', methods=('GET', 'POST'))
@@ -48,10 +44,12 @@ def signup():
         user = User_02.query.filter_by(username=form.username.data).first()
         if not user:
             today_date = datetime.datetime.now().date()
-            user = User_02(username=form.username.data,
-                        password=generate_password_hash(form.password1.data),
-                        email=form.email.data,
-                        create_date=today_date)
+            user = User_02(
+                username=form.username.data,
+                password=generate_password_hash(form.password1.data),
+                email=form.email.data,
+                create_date=today_date
+            )
             db.session.add(user)
             db.session.commit()
             reportData = {

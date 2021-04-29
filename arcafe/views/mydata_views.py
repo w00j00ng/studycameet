@@ -3,7 +3,6 @@ from flask import session, g
 from arcafe.models import User_02
 from arcafe import db
 import pandas as pd
-import time
 
 
 bp = Blueprint('mydata', __name__, url_prefix='/mydata/')
@@ -15,11 +14,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        try:
-            g.user = User_02.query.get(user_id)
-        except:
-            time.sleep(2)
-            g.user = User_02.query.get(user_id)
+        g.user = User_02.query.get(user_id)
 
 
 @bp.route('/')

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, g, request
+from flask import Blueprint, render_template, redirect, url_for, request
 from mytools import detect_blinks
 from threading import Thread
 import time
@@ -18,11 +18,8 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        try:
-            g.user = User_02.query.get(user_id)
-        except:
-            time.sleep(2)
-            g.user = User_02.query.get(user_id)
+        g.user = User_02.query.get(user_id)
+
 
 startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime = 0, 0, 0, 0, 0
 totalRestTime, restStartTime = 0, 0
@@ -42,11 +39,11 @@ def index():
     operationTime = endTime - startTime
     today_date = datetime.datetime.now().date()
 
-    danger, lazy=False, False
+    danger, lazy = False, False
     if totalRestTime / operationTime < 0.05:
-        danger=True
+        danger = True
     elif totalRestTime / operationTime > 0.2:
-        lazy=True
+        lazy = True
 
     return render_template('nagbot/result.html',
                            bCommited=bCommited,
