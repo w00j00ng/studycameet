@@ -52,8 +52,10 @@ def main():
     print("[INFO] starting video stream thread...")
     print("[INFO] print q to quit...")
 
-    lastBlinkTime = time.time()
-    lastAlarmedTime = time.time()
+    time_ = time.time()
+    lastBlinkTime = time_
+    lastAlarmedTime = time_
+    restStartTime = time_
 
     bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
 
@@ -68,6 +70,7 @@ def main():
             break
         try:
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
+            nagbot_views.working()
 
             # determine the facial landmarks for the face region, then
             # convert the facial landmark (x, y)-coordinates to a NumPy array
@@ -121,6 +124,7 @@ def main():
                 bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, True
                 nagbot_views.noface()
             if eyeOpenedTime > 15:
+                nagbot_views.rest()
                 lastBlinkTime = now_time
 
         cv2.imshow("VideoFrame", frame)

@@ -8,7 +8,9 @@ from arcafe.models import Usage_02
 from flask import session, g
 from arcafe.models import User_02
 
+
 bp = Blueprint('nagbot', __name__, url_prefix='/nagbot/')
+
 
 @bp.before_request
 def load_logged_in_user():
@@ -19,7 +21,9 @@ def load_logged_in_user():
         g.user = User_02.query.get(user_id)
 
 startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime = 0, 0, 0, 0, 0
+totalRestTime, restStartTime = 0, 0
 blinkCount, warningCount, alertCount = 0, 0, 0
+bRestCheck = False
 
 
 @bp.route('/')
@@ -35,6 +39,7 @@ def index():
     return render_template('nagbot/result.html',
                            operationTime=operationTime,
                            longestOpenedTime=longestOpenedTime,
+                           totalWorkingTime=operationTime-totalRestTime,
                            blinkCount=blinkCount,
                            warningCount=warningCount,
                            alertCount=alertCount,
@@ -61,6 +66,7 @@ def upload():
     today_date = datetime.datetime.now().date()
     usage = Usage_02(username=request.form['username'],
                      operationTime=request.form['operationTime'],
+                     totalWorkingTime=request.form['totalWorkingTime'],
                      longestOpenedTime=request.form['longestOpenedTime'],
                      blinkCount=request.form['blinkCount'],
                      warningCount=request.form['warningCount'],
@@ -108,4 +114,23 @@ def alert():
 def noface():
     global blinkCount, lastBlinkTime
     print("No Face Detected")
+    return redirect(url_for('nagbot.index'))
+
+
+@bp.route('/working/', methods=["POST"])
+def working():
+    global bRestCheck, restStartTime, totalRestTime
+    if bRestCheck:
+        totalRestTime += time.time() - restStartTime
+        bRestCheck = False
+    return redirect(url_for('nagbot.index'))
+
+
+@bp.route('/rest/', methods=["POST"])
+def rest():
+    global bRestCheck, restStartTime
+    if not bRestCheck:
+        print("Rest")
+        restStartTime = time.time()
+        bRestCheck = True
     return redirect(url_for('nagbot.index'))

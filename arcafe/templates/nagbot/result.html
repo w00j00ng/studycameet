@@ -19,6 +19,7 @@
                     <form action="{{url_for('nagbot.upload')}}" method="post" class="post-form my-3 ml-3">
                         <input type="hidden" name="username" value="{{g.user.username}}">
                         <input type="hidden" name="operationTime" value="{{operationTime|round(1, 'ceil')}}">
+                        <input type="hidden" name="totalWorkingTime" value="{{totalWorkingTime|round(1, 'ceil')}}">
                         <input type="hidden" name="longestOpenedTime" value="{{longestOpenedTime|round(1, 'ceil')}}">
                         <input type="hidden" name="blinkCount" value={{blinkCount}}>
                         <input type="hidden" name="warningCount" value={{warningCount}}>
@@ -41,6 +42,7 @@
     </thead>
     <tbody>
       <tr><td>총 시간</td><td>{{operationTime|round(1, 'ceil')}} 초</td></tr>
+      <tr><td>업무 시간</td><td>{{totalWorkingTime|round(1, 'ceil')}} 초</td></tr>
       <tr><td>가장 오래 깜빡이지 않은 시간</td><td>{{longestOpenedTime|round(1, 'ceil')}} 초</td></tr>
       <tr><td>눈 깜빡인 횟수</td><td>{{ blinkCount }} 회</td></tr>
       <tr><td>경고 횟수</td><td>{{ warningCount }} 회</td></tr>
