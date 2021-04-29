@@ -1,28 +1,28 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 sample_df = [
-        (1, 'test1', 13.1, 13.1, 7.2, 3, 0, 0, '2021-04-29'),
-        (2, 'test1', 75.5, 75.5, 7.5, 2, 0, 0, '2021-04-29'),
-        (3, 'test1', 70.5, 71.5, 2.5, 5, 0, 0, '2021-04-30')
+        (88.6, 88.6, 95.2, 3, 0, 0, '2021-04-29'),
+        (70.5, 71.5, 94.5, 5, 0, 0, '2021-04-30')
     ]
 
 mydataDf = pd.DataFrame(sample_df,
                         columns=[
-                            'id',
-                            'username',
                             'operationTime',
                             'totalWorkingTime',
-                            'longestOpenedTime',
+                            'percentage',
                             'blinkCount',
                             'warningCount',
                             'alertCount',
                             'create_date'
                         ])
 
-df_a = mydataDf.drop(['id', 'username'], axis=1)
+print(mydataDf.info())
 
-print(df_a.info())
+print(mydataDf)
 
-df_a_grouped = df_a.groupby(df_a['create_date'])
+# plt.plot(mydataDf['create_date'], mydataDf['percentage'])
+plt.plot(mydataDf['create_date'], mydataDf['warningCount'])
+plt.plot(mydataDf['create_date'], mydataDf['alertCount'])
 
-print(df_a_grouped.sum())
+plt.show()

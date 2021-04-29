@@ -32,14 +32,12 @@ def mydata():
 @bp.route('/bydate/')
 def bydate():
     global mydataList
-    query_mydata = db.engine.execute(f"SELECT 'id'"
-                                     f"     , 'username'"
-                                     f'     , SUM(operationTime)'
-                                     f'     , SUM(totalWorkingTime)'
+    query_mydata = db.engine.execute(f"SELECT SUM(operationTime) / 60"
+                                     f'     , SUM(totalWorkingTime) / 60'
                                      f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100'
-                                     f'     , SUM(blinkCount)'
-                                     f'     , SUM(warningCount)'
-                                     f'     , SUM(alertCount)'
+                                     f'     , SUM(blinkCount) / SUM(totalWorkingTime) * 60'
+                                     f'     , SUM(warningCount)/ SUM(totalWorkingTime) * 60'
+                                     f'     , SUM(alertCount)/ SUM(totalWorkingTime) * 60'
                                      f'     , create_date '
                                      f'FROM usage_02 '
                                      f'WHERE username = "{g.user.username}" '
