@@ -18,7 +18,11 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User_02.query.get(user_id)
+        try:
+            g.user = User_02.query.get(user_id)
+        except:
+            time.sleep(2)
+            g.user = User_02.query.get(user_id)
 
 startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime = 0, 0, 0, 0, 0
 totalRestTime, restStartTime = 0, 0
@@ -105,6 +109,7 @@ def blink():
     blinkCount += 1
     if lastBlinkTime - prevBlinkTime > longestOpenedTime:
         longestOpenedTime = lastBlinkTime - prevBlinkTime
+    prevBlinkTime = lastBlinkTime
     return redirect(url_for('nagbot.index'))
 
 
