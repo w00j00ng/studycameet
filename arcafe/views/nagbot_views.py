@@ -24,6 +24,7 @@ startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime = 0, 0, 0, 0
 totalRestTime, restStartTime = 0, 0
 blinkCount, warningCount, alertCount = 0, 0, 0
 bRestCheck = False
+bCommited = False
 
 
 @bp.route('/')
@@ -44,6 +45,7 @@ def index():
         lazy=True
 
     return render_template('nagbot/result.html',
+                           bCommited=bCommited,
                            operationTime=operationTime,
                            longestOpenedTime=longestOpenedTime,
                            totalWorkingTime=operationTime-totalRestTime,
@@ -59,6 +61,8 @@ def index():
 def execute():
     global startTime, endTime, prevBlinkTime, lastBlinkTime, longestOpenedTime
     global blinkCount, warningCount, alertCount
+    global bCommited
+    bCommited = False
     startTime = time.time()
     prevBlinkTime, lastBlinkTime = startTime, startTime
     longestOpenedTime = 0
@@ -72,6 +76,7 @@ def execute():
 
 @bp.route('/upload/', methods=["POST"])
 def upload():
+    global bCommited
     today_date = datetime.datetime.now().date()
     usage = Usage_02(username=request.form['username'],
                      operationTime=request.form['operationTime'],
@@ -83,6 +88,7 @@ def upload():
                      create_date=today_date)
     db.session.add(usage)
     db.session.commit()
+    bCommited = True
 
     return redirect(url_for('nagbot.index'))
 

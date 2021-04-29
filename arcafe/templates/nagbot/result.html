@@ -15,6 +15,7 @@
                 </form>
             </td>
             {% if g.user %}
+            {% if not bCommited %}
                 <td>
                     <form action="{{url_for('nagbot.upload')}}" method="post" class="post-form my-3 ml-3">
                         <input type="hidden" name="username" value="{{g.user.username}}">
@@ -27,6 +28,7 @@
                         <button type="submit" class="btn btn-primary">등록하기</button>
                     </form>
                 </td>
+            {% endif %}
             {% endif %}
         </tr>
     </table>
