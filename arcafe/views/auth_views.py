@@ -5,6 +5,7 @@ from arcafe.models import User_02
 from werkzeug.security import generate_password_hash, check_password_hash
 from arcafe import db
 import datetime
+import time
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
@@ -15,7 +16,11 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User_02.query.get(user_id)
+        try:
+            g.user = User_02.query.get(user_id)
+        except:
+            time.sleep(2)
+            g.user = User_02.query.get(user_id)
 
 
 @bp.route('/login/', methods=('GET', 'POST'))

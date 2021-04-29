@@ -3,6 +3,7 @@ from flask import session, g
 from arcafe.models import User_02
 from arcafe import db
 import pandas as pd
+import time
 
 
 bp = Blueprint('mydata', __name__, url_prefix='/mydata/')
@@ -14,7 +15,11 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User_02.query.get(user_id)
+        try:
+            g.user = User_02.query.get(user_id)
+        except:
+            time.sleep(2)
+            g.user = User_02.query.get(user_id)
 
 
 @bp.route('/')
@@ -42,9 +47,10 @@ def bydate():
 
 @bp.route('/byweek/')
 def byweek():
-    query_mydata = db.engine.execute(f"SELECT SUM(operationTime) / 60"
-                                     f'     , SUM(totalWorkingTime) / 60'
-                                     f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100'
+    query_mydata = db.engine.execute(f"SELECT COUNT(distinct create_date)"
+                                     f"     , SUM(operationTime) / 60"
+                                     f'     , SUM(totalWorkingTime) / 60 / COUNT(distinct create_date)'
+                                     f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100 / COUNT(distinct create_date)'
                                      f'     , SUM(blinkCount) / SUM(totalWorkingTime) * 60'
                                      f'     , SUM(warningCount)/ SUM(totalWorkingTime) * 60'
                                      f'     , SUM(alertCount)/ SUM(totalWorkingTime) * 60'
