@@ -91,7 +91,6 @@ def upload():
 def blink():
     global blinkCount, prevBlinkTime, lastBlinkTime, longestOpenedTime
     lastBlinkTime = time.time()
-    print("Blink")
     if blinkCount == 0:
         prevBlinkTime = lastBlinkTime
         longestOpenedTime = lastBlinkTime - startTime
@@ -107,7 +106,6 @@ def blink():
 def warning():
     global warningCount
     warningCount += 1
-    print("Warning")
     return redirect(url_for('nagbot.index'))
 
 
@@ -115,14 +113,12 @@ def warning():
 def alert():
     global blinkCount, lastBlinkTime, alertCount
     alertCount += 1
-    print("Alert")
     return redirect(url_for('nagbot.index'))
 
 
 @bp.route('/noface/', methods=["POST"])
 def noface():
     global blinkCount, lastBlinkTime
-    print("No Face Detected")
     return redirect(url_for('nagbot.index'))
 
 
@@ -139,7 +135,6 @@ def working():
 def rest():
     global bRestCheck, restStartTime
     if not bRestCheck:
-        print("Rest")
         restStartTime = time.time()
         bRestCheck = True
     return redirect(url_for('nagbot.index'))

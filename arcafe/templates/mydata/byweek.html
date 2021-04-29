@@ -22,7 +22,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>날짜</th>
+                <th>요일</th>
                 <th>총 이용 시간</th>
                 <th>작업 시간</th>
                 <th>작업 효율</th>
@@ -34,7 +34,7 @@
         <tbody>
         {% for row in result %}
             <tr>
-                <td>{{row[6]}}</td>
+                <td>{{weekname[row[6]]}}</td>
                 <td>{{row[0]|round(1, 'ceil')}} 분</td>
                 <td>{{row[1]|round(1, 'ceil')}} 분</td>
                 <td>{{row[2]|round(1, 'ceil')}} %</td>

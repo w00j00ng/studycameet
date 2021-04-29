@@ -25,7 +25,6 @@ def mydata():
     global mydataList
     query_mydata = db.engine.execute(f'SELECT * FROM usage_02 WHERE username = "{g.user.username}" ORDER BY id')
     all_rows = [row for row in query_mydata]
-    print(all_rows)
     return render_template('mydata/index.html', result=all_rows)
 
 
@@ -43,8 +42,28 @@ def bydate():
                                      f'WHERE username = "{g.user.username}" '
                                      f'GROUP BY create_date')
     all_rows = [row for row in query_mydata]
-    print(all_rows)
     return render_template('mydata/bydate.html', result=all_rows)
+
+
+@bp.route('/byweek/')
+def byweek():
+    global mydataList
+    query_mydata = db.engine.execute(f"SELECT SUM(operationTime) / 60"
+                                     f'     , SUM(totalWorkingTime) / 60'
+                                     f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100'
+                                     f'     , SUM(blinkCount) / SUM(totalWorkingTime) * 60'
+                                     f'     , SUM(warningCount)/ SUM(totalWorkingTime) * 60'
+                                     f'     , SUM(alertCount)/ SUM(totalWorkingTime) * 60'
+                                     f'     , WEEKDAY(create_date) '
+                                     f'FROM usage_02 '
+                                     f'WHERE username = "{g.user.username}" '
+                                     f'GROUP BY WEEKDAY(create_date) '
+                                     f'ORDER BY WEEKDAY(create_date)')
+    weekname = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+
+    all_rows = [row for row in query_mydata]
+
+    return render_template('mydata/byweek.html', result=all_rows, weekname=weekname)
 
 
 @bp.route('/detail/')

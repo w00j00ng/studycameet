@@ -39,7 +39,7 @@ def main():
 
     # initialize dlib's face detector (HOG-based) and then create
     # the facial landmark predictor
-    print("[INFO] loading facial landmark predictor...")
+    # print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(SHAPE_PREDICTOR)
 
@@ -49,8 +49,8 @@ def main():
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
 
     # start the video stream thread
-    print("[INFO] starting video stream thread...")
-    print("[INFO] print q to quit...")
+    # print("[INFO] starting video stream thread...")
+    # print("[INFO] print q to quit...")
 
     time_ = time.time()
     lastBlinkTime = time_
