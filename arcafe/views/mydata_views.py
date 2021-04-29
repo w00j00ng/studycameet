@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 from flask import session, g
 from arcafe.models import User_02
 from arcafe import db
@@ -19,9 +19,7 @@ def load_logged_in_user():
 
 @bp.route('/')
 def mydata():
-    query_mydata = db.engine.execute(f'SELECT * FROM usage_02 WHERE username = "{g.user.username}" ORDER BY id')
-    all_rows = [row for row in query_mydata]
-    return render_template('mydata/index.html', result=all_rows)
+    return redirect(url_for('mydata.bydate'))
 
 
 @bp.route('/bydate/')
@@ -35,7 +33,8 @@ def bydate():
                                      f'     , create_date '
                                      f'FROM usage_02 '
                                      f'WHERE username = "{g.user.username}" '
-                                     f'GROUP BY create_date')
+                                     f'GROUP BY create_date '
+                                     f'ORDER BY create_date desc')
     all_rows = [row for row in query_mydata]
     return render_template('mydata/bydate.html', result=all_rows)
 
