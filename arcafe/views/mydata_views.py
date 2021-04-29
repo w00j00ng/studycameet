@@ -42,7 +42,6 @@ def bydate():
 
 @bp.route('/byweek/')
 def byweek():
-    global mydataList
     query_mydata = db.engine.execute(f"SELECT SUM(operationTime) / 60"
                                      f'     , SUM(totalWorkingTime) / 60'
                                      f'     , SUM(totalWorkingTime) / SUM(operationTime) * 100'
