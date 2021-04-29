@@ -17,6 +17,8 @@
         <thead>
             <tr>
                 <th>요일</th>
+                <th>총 이용 시간</th>
+                <th>총 작업 시간</th>
                 <th>작업 효율</th>
                 <th>1분 당 눈 깜박인 횟수</th>
                 <th>1분 당 경고 횟수</th>
@@ -26,11 +28,13 @@
         <tbody>
         {% for row in result %}
             <tr>
-                <td>{{weekname[row[4]]}}</td>
-                <td>{{row[0]|round(1, 'ceil')}} %</td>
-                <td>{{row[1]|round(1, 'ceil')}} 회</td>
-                <td>{{row[2]|round(1, 'ceil')}} 회</td>
+                <td>{{weekname[row[6]]}}</td>
+                <td>{{row[0]|round(1, 'ceil')}} 분</td>
+                <td>{{row[1]|round(1, 'ceil')}} 분</td>
+                <td>{{row[2]|round(1, 'ceil')}} %</td>
                 <td>{{row[3]|round(1, 'ceil')}} 회</td>
+                <td>{{row[4]|round(1, 'ceil')}} 회</td>
+                <td>{{row[5]|round(1, 'ceil')}} 회</td>
             </tr>
         {% endfor %}
         </tbody>
