@@ -36,6 +36,13 @@ def index():
 
     operationTime = endTime - startTime
     today_date = datetime.datetime.now().date()
+
+    danger, lazy=False, False
+    if totalRestTime / operationTime < 0.05:
+        danger=True
+    elif totalRestTime / operationTime > 0.2:
+        lazy=True
+
     return render_template('nagbot/result.html',
                            operationTime=operationTime,
                            longestOpenedTime=longestOpenedTime,
@@ -43,7 +50,9 @@ def index():
                            blinkCount=blinkCount,
                            warningCount=warningCount,
                            alertCount=alertCount,
-                           today_date=today_date)
+                           today_date=today_date,
+                           danger=danger,
+                           lazy=lazy)
 
 
 @bp.route('/execute/', methods=['POST'])

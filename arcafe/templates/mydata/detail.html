@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="post-form my-3 ml-3">
+    <p>{{ g.user.username }}님 환영합니다</p>
+</div>
+<div class="col-md-8">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>날짜</th>
+                <th>총 이용 시간</th>
+                <th>작업 시간</th>
+                <th>가장 오래 눈 뜬 시간</th>
+                <th>눈 깜박인 횟수</th>
+                <th>경고 횟수</th>
+                <th>알람 횟수</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in result %}
+            <tr>
+                <td>{{row[8]}}</td>
+                <td>{{row[2]}} 초</td>
+                <td>{{row[3]}} 초</td>
+                <td>{{row[4]}} 초</td>
+                <td>{{row[5]}} 회</td>
+                <td>{{row[6]}} 회</td>
+                <td>{{row[7]}} 회</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
