@@ -4,9 +4,8 @@ from threading import Thread
 import time
 import datetime
 from arcafe import db
-from arcafe.models import Usage_02
+from arcafe.models import Usage_02, User_02
 from flask import session, g
-from arcafe.models import User_02
 
 
 bp = Blueprint('nagbot', __name__, url_prefix='/nagbot/')

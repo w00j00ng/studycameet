@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template
 from flask import session, g
 from arcafe.models import User_02
 from arcafe import db
 import pandas as pd
+# from mytools.analyzer import GetGraph
 
 
 bp = Blueprint('mydata', __name__, url_prefix='/mydata/')
@@ -48,6 +49,7 @@ def bydate():
                                      f'GROUP BY create_date '
                                      f'ORDER BY create_date desc')
     all_rows = [row for row in query_mydata]
+
     return render_template('mydata/bydate.html', result=all_rows)
 
 
@@ -67,6 +69,7 @@ def byweek():
     weekname = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
 
     all_rows = [row for row in query_mydata]
+    # GetGraph(all_rows, 6, 2)
 
     return render_template('mydata/byweek.html', result=all_rows, weekname=weekname)
 
