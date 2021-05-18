@@ -4,8 +4,6 @@ import time
 import dlib
 import cv2
 import cvlib as cv
-from cvlib.object_detection import draw_bbox
-import winsound
 from config import BASE_DIR
 from studycam.views import cambot_views
 
@@ -98,11 +96,12 @@ def main():
                 COUNTER = 0
 
         except IndexError:  # when no face is detected
+            print(label)
             print("Face is not straight")
 
         cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.imshow("스터디캠", frame)
+        cv2.imshow("Study Cameet", frame)
         key = cv2.waitKey(33)
 
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
