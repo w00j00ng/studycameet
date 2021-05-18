@@ -2,41 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="996e107b-6583-4578-9668-6742804f15c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/studycam.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/arcafeProject.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/forms.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/static/bootstrap.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/static/bootstrap.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/static/jquery-3.5.1.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/static/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/auth/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/auth/signup.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/auth/signupFinished.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/base.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/form_errors.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/main/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/mydata/bydate.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/mydata/byweek.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/mydata/detail.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/mydata/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/nagbot/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/templates/nagbot/result.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/views/auth_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/views/main_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/views/mydata_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/arcafe/views/nagbot_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/README" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/alembic.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/env.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/script.py.mako" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/versions/07b65cf1009f_.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mytools/detect_blinks.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytools/detect_blinks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +24,34 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="detect_blinks" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="studycam" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/mytools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mytools/detect_blinks.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.detect_blinks" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

@@ -3,6 +3,8 @@ from imutils import face_utils
 import time
 import dlib
 import cv2
+import cvlib as cv
+from cvlib.object_detection import draw_bbox
 import winsound
 from config import BASE_DIR
 from studycam.views import cambot_views
@@ -52,23 +54,21 @@ def main():
     # print("[INFO] starting video stream thread...")
     # print("[INFO] print q to quit...")
 
-    time_ = time.time()
-    lastBlinkTime = time_
-    lastAlarmedTime = time_
-    restStartTime = time_
-
-    bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
-
     # loop over frames from the video stream
     while True:
         now_time = time.time()
-        eyeOpenedTime = now_time - lastBlinkTime
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
+        bbox, label, conf = cv.detect_common_objects(frame)
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         except cv2.error:
             break
         try:
+            if 'person' not in label:
+                print('Not in seat')
+                continue
+            if 'cell phone' in label:
+                print('cell phone')
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
             cambot_views.working()
 
@@ -94,40 +94,15 @@ def main():
                 # then increment the total number of blinks
                 if COUNTER >= EYE_AR_CONSEC_FRAMES:
                     TOTAL += 1
-                    lastBlinkTime = now_time
                     cambot_views.blink()
-                    bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
                 COUNTER = 0
 
-            cv2.putText(frame, "Time: {:.0f}".format(eyeOpenedTime), (300, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(frame, "Press 'q' to Exit", (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            if eyeOpenedTime > 10:
-                cv2.putText(frame, "WARNING Blink Eyes!", (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                if not bWarningBefore:
-                    cambot_views.warning()
-                    bWarningBefore, bAlertBefore, bNoFaceBefore = True, False, False
-
-            if eyeOpenedTime > 20 and (now_time - lastAlarmedTime > 5):
-                duration = 1000  # milliseconds
-                freq = 440  # Hz
-                winsound.Beep(freq, duration)
-                if not bAlertBefore:
-                    cambot_views.alert()
-                    bWarningBefore, bAlertBefore, bNoFaceBefore = False, True, False
-                lastAlarmedTime = now_time
-
         except IndexError:  # when no face is detected
-            if not bNoFaceBefore:
-                bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, True
-                cambot_views.noface()
-            if eyeOpenedTime > 15:
-                cambot_views.rest()
-                lastBlinkTime = now_time
+            print("Face is not straight")
 
-        cv2.imshow("VideoFrame", frame)
+        cv2.putText(frame, "Press 'q' to Exit", (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.imshow("스터디캠", frame)
         key = cv2.waitKey(33)
 
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
