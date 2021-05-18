@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="#">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
-    <title>스터디캠</title>
+    <title>스터디캠잇</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <a class="navbar-brand" href="{{url_for('main.index') }}">처음으로</a>
+    <a class="navbar-brand" href="{{url_for('main.index') }}">스터디캠잇</a>
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('cambot.index') }}">스터디캠</a>
+                    <a class="nav-link" href="{{ url_for('cambot.index') }}">공부하기</a>
             </li>
         </ul>
         {% if g.user %}
