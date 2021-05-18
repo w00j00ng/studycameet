@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, SelectField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 
@@ -13,6 +13,7 @@ class UserCreateForm(FlaskForm):
                               )
     password2 = PasswordField('비밀번호확인', validators=[DataRequired()])
     email = EmailField('이메일', validators=[DataRequired(), Email()])
+    div = SelectField('회원구분', choices=[('0', '학생'), ('1', '강사')])
 
 
 class UserLoginForm(FlaskForm):

@@ -1,9 +1,9 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 from flask import flash, session, g
-from arcafe.forms import UserCreateForm, UserLoginForm
-from arcafe.models import User_02
+from studycam.forms import UserCreateForm, UserLoginForm
+from studycam.models import User_02
 from werkzeug.security import generate_password_hash, check_password_hash
-from arcafe import db
+from studycam import db
 import datetime
 
 
@@ -48,7 +48,7 @@ def signup():
                 username=form.username.data,
                 password=generate_password_hash(form.password1.data),
                 email=form.email.data,
-                create_date=today_date
+                div=form.div.data
             )
             db.session.add(user)
             db.session.commit()

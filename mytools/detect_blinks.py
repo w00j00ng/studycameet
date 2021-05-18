@@ -5,7 +5,7 @@ import dlib
 import cv2
 import winsound
 from config import BASE_DIR
-from arcafe.views import nagbot_views
+from studycam.views import cambot_views
 
 
 def eye_aspect_ratio(eye):
@@ -70,7 +70,7 @@ def main():
             break
         try:
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
-            nagbot_views.working()
+            cambot_views.working()
 
             # determine the facial landmarks for the face region, then
             # convert the facial landmark (x, y)-coordinates to a NumPy array
@@ -95,7 +95,7 @@ def main():
                 if COUNTER >= EYE_AR_CONSEC_FRAMES:
                     TOTAL += 1
                     lastBlinkTime = now_time
-                    nagbot_views.blink()
+                    cambot_views.blink()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, False
                 COUNTER = 0
 
@@ -107,7 +107,7 @@ def main():
                 cv2.putText(frame, "WARNING Blink Eyes!", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                 if not bWarningBefore:
-                    nagbot_views.warning()
+                    cambot_views.warning()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = True, False, False
 
             if eyeOpenedTime > 20 and (now_time - lastAlarmedTime > 5):
@@ -115,16 +115,16 @@ def main():
                 freq = 440  # Hz
                 winsound.Beep(freq, duration)
                 if not bAlertBefore:
-                    nagbot_views.alert()
+                    cambot_views.alert()
                     bWarningBefore, bAlertBefore, bNoFaceBefore = False, True, False
                 lastAlarmedTime = now_time
 
         except IndexError:  # when no face is detected
             if not bNoFaceBefore:
                 bWarningBefore, bAlertBefore, bNoFaceBefore = False, False, True
-                nagbot_views.noface()
+                cambot_views.noface()
             if eyeOpenedTime > 15:
-                nagbot_views.rest()
+                cambot_views.rest()
                 lastBlinkTime = now_time
 
         cv2.imshow("VideoFrame", frame)

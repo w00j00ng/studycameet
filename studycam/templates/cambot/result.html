@@ -2,15 +2,15 @@
 {% block content %}
 <div class="post-form my-3 ml-3">
     <p>
-        버튼을 누르면 잔소리가 시작됩니다<br>
-        잔소리를 끄시려면 비디오 화면을 선택하고 'q'를 눌러주세요
+        수업을 시작하면 버튼을 눌러주세요<br>
+        끄시려면 비디오 화면을 선택하고 'q'를 눌러주세요
     </p>
 </div>
 <div>
     <table>
         <tr>
             <td>
-                <form action="{{url_for('nagbot.execute')}}" method="post" class="post-form my-3 ml-3">
+                <form action="{{url_for('cambot.execute')}}" method="post" class="post-form my-3 ml-3">
                     <button type="submit" class="btn btn-primary">시작하기</button>
                 </form>
             </td>
@@ -25,29 +25,12 @@
                         <input type="hidden" name="blinkCount" value={{blinkCount}}>
                         <input type="hidden" name="warningCount" value={{warningCount}}>
                         <input type="hidden" name="alertCount" value={{alertCount}}>
-                        <button type="submit" class="btn btn-primary">등록하기</button>
+                        <button type="submit" class="btn btn-primary">종료하기</button>
                     </form>
                 </td>
             {% endif %}
             {% endif %}
         </tr>
     </table>
-</div>
-<div class="col-md-3">
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>항목</th><th>시간</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>총 시간</td><td>{{operationTime|round(1, 'ceil')}} 초</td></tr>
-      <tr><td>업무 시간</td><td>{{totalWorkingTime|round(1, 'ceil')}} 초</td></tr>
-      <tr><td>가장 오래 깜빡이지 않은 시간</td><td>{{longestOpenedTime|round(1, 'ceil')}} 초</td></tr>
-      <tr><td>눈 깜빡인 횟수</td><td>{{ blinkCount }} 회</td></tr>
-      <tr><td>경고 횟수</td><td>{{ warningCount }} 회</td></tr>
-      <tr><td>알람 횟수</td><td>{{ alertCount }} 회</td></tr>
-    </tbody>
-  </table>
 </div>
 {% endblock %}

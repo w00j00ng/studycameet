@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template
 from flask import session, g
-from arcafe.models import User_02
-from arcafe import db
-import pandas as pd
+from studycam.models import User_02
+from studycam import db
 # from mytools.analyzer import GetGraph
 
 

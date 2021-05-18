@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from flask import session, g
-from arcafe.models import User_02
+from studycam.models import User_02
 
 
 bp = Blueprint('main', __name__, url_prefix='/')

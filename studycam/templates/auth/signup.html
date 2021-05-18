@@ -5,6 +5,9 @@
         {{ form.csrf_token }}
         {% include "form_errors.html" %}
 
+        {{ form.div.label }}
+        {{ form.div(class='form-control') }}
+
         {{ form.username.label }} (5 ~ 25자)
         {{ form.username(class='form-control') }}
 

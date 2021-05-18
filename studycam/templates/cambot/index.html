@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="post-form my-3 ml-3">
+    <p>
+        수업을 시작하면 버튼을 눌러주세요<br>
+        끄시려면 비디오 화면을 선택하고 'q'를 눌러주세요
+    </p>
+</div>
+<div>
+    <form action="{{url_for('cambot.execute')}}" method="post" class="post-form my-3 ml-3">
+        <button type="submit" class="btn btn-primary">시작하기</button>
+    </form>
+</div>
+{% endblock %}
