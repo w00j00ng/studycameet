@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="996e107b-6583-4578-9668-6742804f15c3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/studycameet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/studycameet.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytools/model_optimal.h5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myclass/Camlog.py" beforeDir="false" afterPath="$PROJECT_DIR$/myclass/Camlog.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mytools/detect_blinks.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytools/detect_blinks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,6 +25,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projects\cameetProject\mytools" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="detect_blinks" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">

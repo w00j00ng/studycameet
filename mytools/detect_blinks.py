@@ -6,6 +6,8 @@ import cv2
 import cvlib as cv
 from config import BASE_DIR
 from studycam.views import cambot_views
+import numpy as np
+from keras.models import load_model
 
 
 def eye_aspect_ratio(eye):
@@ -23,6 +25,26 @@ def eye_aspect_ratio(eye):
 
     # return the eye aspect ratio
     return ear
+
+
+def get_emotion(frame, gray, model):
+    label_dict = {0: 'Angry', 1: 'Disgust', 2: 'Fear', 3: 'Happy', 4: 'Neutral', 5: 'Sad', 6: 'Surprise'}
+    faces = cv.detect_face(frame)
+    if faces:
+        face = cv.detect_face(frame)[0][0]
+        (startX, startY) = face[0], face[1]
+        (endX, endY) = face[2], face[3]
+        face_crop = np.copy(gray[startY:endY, startX:endX])
+        face_crop = cv2.resize(face_crop, (48, 48))
+        face_crop = np.expand_dims(face_crop, axis=0)
+        face_crop = face_crop.reshape(1, 48, 48, 1)
+        result = model.predict(face_crop)
+        result = list(result[0])
+        if max(result) > 0.8:
+            emotion_index = result.index(max(result))
+            return label_dict[emotion_index]
+        return "No Emotion"
+    return "No Face"
 
 
 def main():
@@ -49,6 +71,9 @@ def main():
     (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
 
+    model = load_model(f"{BASE_DIR}/mytools/model_optimal.h5")
+
+
     # start the video stream thread
     # print("[INFO] starting video stream thread...")
     # print("[INFO] print q to quit...")
@@ -57,22 +82,19 @@ def main():
     while True:
         now_time = time.time()
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
-        bbox, label, conf = cv.detect_common_objects(frame)
 
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         except cv2.error:
             break
         try:
-            if 'person' not in label:
-                # print('Not in seat')
+            faces = cv.detect_face(frame)
+            if not faces:
                 continue
-            if 'cell phone' in label or 'remote' in label:
-                # print('cell phone')
-                pass
+
+            print(get_emotion(frame, gray, model))
+
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
-            print(rect)
-            print(type(rect))
             cambot_views.working()
 
             # determine the facial landmarks for the face region, then
