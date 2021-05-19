@@ -155,9 +155,6 @@ def main():
 
         faces, confidences = cv.detect_face(frame)
 
-        if faces is None:
-            continue
-
         present_emotion = get_emotion(faces, gray, emotion_model)
         present_eye = is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd)
 
@@ -180,8 +177,6 @@ def main():
             if eyeClosed:
                 eyeClosedTime = eyecheck_now - lastEyeOpenedTime
             eyeClosed = True
-        elif eyeClosedTime > 5:
-            eyeClosedTime = 0
 
         emotion_data[present_emotion] += 1
         loop_count += 1

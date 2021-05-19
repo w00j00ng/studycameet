@@ -6,6 +6,10 @@ from studycam.models import User
 from flask import session, g
 
 
+DEFAULT_LECTURE_ID = 1
+DEFAULT_TEACHER_ID = 1
+
+
 bp = Blueprint('cambot', __name__, url_prefix='/cambot/')
 
 
