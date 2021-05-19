@@ -27,19 +27,46 @@ def eye_aspect_ratio(eye):
     return ear
 
 
-def get_emotion(face, gray, model):
+def is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd):
+    EYE_AR_THRESH = 0.27
+    rects = detector(gray, 0)
+    if not rects:
+        return -1
+    rect = rects[0]
+    shape = predictor(gray, rect)
+    shape = face_utils.shape_to_np(shape)
+
+    leftEye = shape[lStart:lEnd]
+    rightEye = shape[rStart:rEnd]
+    leftEAR = eye_aspect_ratio(leftEye)
+    rightEAR = eye_aspect_ratio(rightEye)
+
+    ear = (leftEAR + rightEAR) / 2.0  # average the eye aspect ratio together for both eyes
+    # check to see if the eye aspect ratio is below the blink
+    if ear < EYE_AR_THRESH:
+        return 0
+    return 1
+
+
+def get_emotion(faces, gray, model):
     label_dict = {0: 'Angry', 1: 'Disgust', 2: 'Fear', 3: 'Happy', 4: 'Neutral', 5: 'Sad', 6: 'Surprise'}
-    (startX, startY) = face[0], face[1]
-    (endX, endY) = face[2], face[3]
-    face_crop = np.copy(gray[startY:endY, startX:endX])
-    face_crop = cv2.resize(face_crop, (48, 48))
-    face_crop = np.expand_dims(face_crop, axis=0)
-    face_crop = face_crop.reshape(1, 48, 48, 1)
-    result = model.predict(face_crop)
-    result = list(result[0])
-    if max(result) > 0.8:
-        emotion_index = result.index(max(result))
-        return label_dict[emotion_index]
+    try:
+        face = faces[0]
+        (startX, startY) = face[0], face[1]
+        (endX, endY) = face[2], face[3]
+        face_crop = np.copy(gray[startY:endY, startX:endX])
+        face_crop = cv2.resize(face_crop, (48, 48))
+        face_crop = np.expand_dims(face_crop, axis=0)
+        face_crop = face_crop.reshape(1, 48, 48, 1)
+        result = model.predict(face_crop)
+        result = list(result[0])
+        if max(result) > 0.8:
+            emotion_index = result.index(max(result))
+            return label_dict[emotion_index]
+    except IndexError:
+        return "No Face"
+    except cv2.error:
+        return "No Face"
     return "No Emotion"
 
 
@@ -47,12 +74,6 @@ def main():
     capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라 또는 외장 카메라에서 영상을 받아오기
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # capture.set(option, n), 카메라의 속성을 설정
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
-
-    EYE_AR_THRESH = 0.27
-    SLEEP_STD_TIME = 5
-    bEyeOpened = True
-    bSleep = False
-    lastEyeClosedTime = 0
 
     SHAPE_PREDICTOR = f"{BASE_DIR}/mytools/shape_predictor_68_face_landmarks.dat"
 
@@ -77,52 +98,18 @@ def main():
     while True:
         now_time = time.time()
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
-
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         except cv2.error:
-            break
-        try:
-            faces = cv.detect_face(frame)
-            if not faces:
-                continue
+            continue
 
-            print(get_emotion(faces[0], gray, emotion_model))
+        faces, confidences = cv.detect_face(frame)
 
-            rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
+        if faces is None:
+            continue
 
-            # determine the facial landmarks for the face region, then
-            # convert the facial landmark (x, y)-coordinates to a NumPy array
-            shape = predictor(gray, rect)
-            shape = face_utils.shape_to_np(shape)
-
-            # extract the left and right eye coordinates, then use the
-            # coordinates to compute the eye aspect ratio for both eyes
-            leftEye = shape[lStart:lEnd]
-            rightEye = shape[rStart:rEnd]
-            leftEAR = eye_aspect_ratio(leftEye)
-            rightEAR = eye_aspect_ratio(rightEye)
-
-            ear = (leftEAR + rightEAR) / 2.0  # average the eye aspect ratio together for both eyes
-
-            # check to see if the eye aspect ratio is below the blink
-            if ear < EYE_AR_THRESH:  # if eyes are closed
-                if bEyeOpened:
-                    lastEyeClosedTime = now_time
-                else:
-                    if lastEyeClosedTime > SLEEP_STD_TIME and not bSleep:
-                        print("sleep")
-                        bSleep = True
-                bEyeOpened = False
-            else:                    # if eyes are opened
-                lastEyeClosedTime = now_time
-                bEyeOpened = True
-                bSleep = False
-
-        except IndexError:  # when no face is detected
-            print("Face is not straight")
-            if lastEyeClosedTime - now_time > 5:
-                lastEyeClosedTime = now_time
+        print(get_emotion(faces, gray, emotion_model))
+        print(is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd))
 
         cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
