@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="996e107b-6583-4578-9668-6742804f15c3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mytools/detect_blinks.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytools/detect_blinks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytools/detect_blinks.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytools/detecter_cam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/studycam/views/cambot_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/views/cambot_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +32,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="detect_blinks" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="detecter_cam" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="studycameet" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -44,7 +44,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mytools/detect_blinks.py" />
+      <option name="SCRIPT_NAME" value="C:\Projects\cameetProject\mytools\detecter_cam.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -55,7 +55,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.detect_blinks" />
+        <item itemvalue="Python.detecter_cam" />
       </list>
     </recent_temporary>
   </component>

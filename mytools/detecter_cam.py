@@ -57,7 +57,7 @@ def get_emotion(faces, gray, model):
         face_crop = np.copy(gray[startY:endY, startX:endX])
         face_crop = cv2.resize(face_crop, (48, 48))
         face_crop = np.expand_dims(face_crop, axis=0)
-        face_crop = face_crop.reshape(1, 48, 48, 1)
+        face_crop = face_crop.reshape((1, 48, 48, 1))
         result = model.predict(face_crop)
         result = list(result[0])
         if max(result) > 0.9:
@@ -131,27 +131,12 @@ def main():
                 'loop_count': loop_count
             }
             if report_count > 0:
-                print(report_data)
                 cambot_views.upload(report_data)
             start_time = now_time
             report_count += 1
 
-            emotion_data = {
-                'Angry': 0,
-                'Disgust': 0,
-                'Fear': 0,
-                'Happy': 0,
-                'Neutral': 0,
-                'Sad': 0,
-                'Surprise': 0,
-                'No Emotion': 0,
-                'No Face': 0,
-            }
-            eye_data = {
-                -1: 0,
-                0: 0,
-                1: 0
-            }
+            emotion_data = dict.fromkeys(emotion_data, 0)
+            eye_data = dict.fromkeys(eye_data, 0)
             loop_count = 0
 
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)

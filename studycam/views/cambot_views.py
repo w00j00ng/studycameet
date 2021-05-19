@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request
-from mytools import detect_blinks
+from mytools import detecter_cam
 from threading import Thread
 from studycam import db
 from studycam.models import User_02
@@ -18,14 +18,14 @@ def load_logged_in_user():
         g.user = User_02.query.get(user_id)
 
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 def index():
-    render_template('cambot/index.html')
+    return render_template('cambot/index.html')
 
 
 @bp.route('/execute/', methods=['POST'])
 def execute():
-    thread = Thread(target=detect_blinks.main())
+    thread = Thread(target=detecter_cam.main())
     thread.start()
     thread.join()
     return redirect(url_for('cambot.index'))
@@ -33,6 +33,8 @@ def execute():
 
 @bp.route('/upload/', methods=["POST"])
 def upload(report_data):
+    user_id = session.get('user_id')
+    print(report_data)
     # usage = Usage_02(username=request.form['username'],
     #                  operationTime=request.form['operationTime'],
     #                  totalWorkingTime=request.form['totalWorkingTime'],
