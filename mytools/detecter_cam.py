@@ -109,7 +109,8 @@ def main():
         1: 0
     }
 
-    longestClosedTime = 0
+    totalClosedTime = 0
+    eyeClosedTime = 0
 
     report_count = 0
     loop_count = 0
@@ -133,18 +134,17 @@ def main():
                 'report_count': report_count,
                 'emotion_data': emotion_data,
                 'eye_data': eye_data,
-                'longestClosedTime': int(longestClosedTime),
+                'totalClosedTime': int(totalClosedTime),
                 'loop_count': loop_count
             }
-            if report_count > 0:
-                cambot_views.upload(report_data)
+            cambot_views.upload(report_data)
             start_time = now_time
             report_count += 1
 
             emotion_data = dict.fromkeys(emotion_data, 0)
             eye_data = dict.fromkeys(eye_data, 0)
             loop_count = 0
-            longestClosedTime = 0
+            totalClosedTime = 0
             eyeClosedTime = 0
 
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
@@ -166,20 +166,23 @@ def main():
         if FirstIter:
             first_time = eyecheck_now
             lastEyeOpenedTime = first_time
-            longestClosedTime = 0
+            totalClosedTime = 0
+            eyeClosedTime = 0
             FirstIter = False
             eyeClosed = False
+            now_time = time.time()
 
         if present_eye == 1:
             lastEyeOpenedTime = eyecheck_now
+            totalClosedTime += eyeClosedTime
+            eyeClosedTime = 0
             eyeClosed = False
-
         elif present_eye == 0:
             if eyeClosed:
                 eyeClosedTime = eyecheck_now - lastEyeOpenedTime
-                if eyeClosedTime > longestClosedTime:
-                    longestClosedTime = eyeClosedTime
             eyeClosed = True
+        elif eyeClosedTime > 5:
+            eyeClosedTime = 0
 
         emotion_data[present_emotion] += 1
         loop_count += 1
