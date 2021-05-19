@@ -187,10 +187,19 @@ def main():
         loop_count += 1
         eye_data[present_eye] += 1
 
-        cv2.putText(frame, "Press 'q' to Exit", (10, 30),
+        cv2.putText(frame, "Press 'p' to Pause", (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, "Press 'q' to Exit", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.imshow("Study Cameet", frame)
         key = cv2.waitKey(33)
+
+        if key == ord("p"):
+            while True:
+                key = cv2.waitKey(33)
+                if key == ord("p"):
+                    start_time = time.time()
+                    break
 
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
             cambot_views.commit_data()
