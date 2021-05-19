@@ -109,6 +109,8 @@ def main():
         1: 0
     }
 
+    longestClosedTime = 0
+
     report_count = 0
     loop_count = 0
 
@@ -118,6 +120,9 @@ def main():
     # print("[INFO] starting video stream thread...")
     # print("[INFO] print q to quit...")
     start_time = time.time()
+    lastEyeOpenedTime = start_time
+    FirstIter = True
+    eyeClosed = False
 
     # loop over frames from the video stream
     while True:
@@ -128,6 +133,7 @@ def main():
                 'report_count': report_count,
                 'emotion_data': emotion_data,
                 'eye_data': eye_data,
+                'longestClosedTime': int(longestClosedTime),
                 'loop_count': loop_count
             }
             if report_count > 0:
@@ -138,6 +144,8 @@ def main():
             emotion_data = dict.fromkeys(emotion_data, 0)
             eye_data = dict.fromkeys(eye_data, 0)
             loop_count = 0
+            longestClosedTime = 0
+            eyeClosedTime = 0
 
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
         try:
@@ -152,6 +160,26 @@ def main():
 
         present_emotion = get_emotion(faces, gray, emotion_model)
         present_eye = is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd)
+
+        eyecheck_now = time.time()
+
+        if FirstIter:
+            first_time = eyecheck_now
+            lastEyeOpenedTime = first_time
+            longestClosedTime = 0
+            FirstIter = False
+            eyeClosed = False
+
+        if present_eye == 1:
+            lastEyeOpenedTime = eyecheck_now
+            eyeClosed = False
+
+        elif present_eye == 0:
+            if eyeClosed:
+                eyeClosedTime = eyecheck_now - lastEyeOpenedTime
+                if eyeClosedTime > longestClosedTime:
+                    longestClosedTime = eyeClosedTime
+            eyeClosed = True
 
         emotion_data[present_emotion] += 1
         loop_count += 1
