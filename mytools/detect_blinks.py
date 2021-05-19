@@ -132,6 +132,7 @@ def main():
             }
             if report_count > 0:
                 print(report_data)
+                cambot_views.upload(report_data)
             start_time = now_time
             report_count += 1
 
@@ -177,6 +178,7 @@ def main():
         key = cv2.waitKey(33)
 
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
+            cambot_views.commit_data()
             break
 
     capture.release()  # do a bit of cleanup
