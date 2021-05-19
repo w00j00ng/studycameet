@@ -27,24 +27,20 @@ def eye_aspect_ratio(eye):
     return ear
 
 
-def get_emotion(frame, gray, model):
+def get_emotion(face, gray, model):
     label_dict = {0: 'Angry', 1: 'Disgust', 2: 'Fear', 3: 'Happy', 4: 'Neutral', 5: 'Sad', 6: 'Surprise'}
-    faces = cv.detect_face(frame)
-    if faces:
-        face = cv.detect_face(frame)[0][0]
-        (startX, startY) = face[0], face[1]
-        (endX, endY) = face[2], face[3]
-        face_crop = np.copy(gray[startY:endY, startX:endX])
-        face_crop = cv2.resize(face_crop, (48, 48))
-        face_crop = np.expand_dims(face_crop, axis=0)
-        face_crop = face_crop.reshape(1, 48, 48, 1)
-        result = model.predict(face_crop)
-        result = list(result[0])
-        if max(result) > 0.8:
-            emotion_index = result.index(max(result))
-            return label_dict[emotion_index]
-        return "No Emotion"
-    return "No Face"
+    (startX, startY) = face[0], face[1]
+    (endX, endY) = face[2], face[3]
+    face_crop = np.copy(gray[startY:endY, startX:endX])
+    face_crop = cv2.resize(face_crop, (48, 48))
+    face_crop = np.expand_dims(face_crop, axis=0)
+    face_crop = face_crop.reshape(1, 48, 48, 1)
+    result = model.predict(face_crop)
+    result = list(result[0])
+    if max(result) > 0.8:
+        emotion_index = result.index(max(result))
+        return label_dict[emotion_index]
+    return "No Emotion"
 
 
 def main():
@@ -71,8 +67,7 @@ def main():
     (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
 
-    model = load_model(f"{BASE_DIR}/mytools/model_optimal.h5")
-
+    emotion_model = load_model(f"{BASE_DIR}/mytools/model_optimal.h5")
 
     # start the video stream thread
     # print("[INFO] starting video stream thread...")
@@ -92,10 +87,9 @@ def main():
             if not faces:
                 continue
 
-            print(get_emotion(frame, gray, model))
+            print(get_emotion(faces[0], gray, emotion_model))
 
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
-            cambot_views.working()
 
             # determine the facial landmarks for the face region, then
             # convert the facial landmark (x, y)-coordinates to a NumPy array
