@@ -18,9 +18,9 @@ class Lecture(db.Model):
 
 class StudyLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    lecture_id = db.Column(db.Integer, nullable=False)
-    lecture_part = db.Column(db.Integer, nullable=False)
-    teacher_id = db.Column(db.Integer, nullable=False)
+    lecture_id = db.Column(db.Integer, nullable=True)
+    lecture_part = db.Column(db.Integer, nullable=True)
+    teacher_id = db.Column(db.Integer, nullable=True)
     student_id = db.Column(db.Integer, nullable=False)
     rate_posture = db.Column(db.Integer, nullable=False)
     rate_concentrate = db.Column(db.Integer, nullable=False)
