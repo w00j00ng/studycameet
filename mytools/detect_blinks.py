@@ -95,6 +95,10 @@ def main():
     # print("[INFO] print q to quit...")
 
     # loop over frames from the video stream
+    emotion_data = {'Angry' :0, 'Disgust': 0, 'Fear': 0, 'Happy': 0, 'Neutral': 0, 'Sad': 0, 'Surprise': 0, 'No Emotion': 0, 'No Face': 0}
+    eye_data = {-1: 0, 0: 0, 1: 0}
+    totalCheckCount = 0
+
     while True:
         now_time = time.time()
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
@@ -108,15 +112,23 @@ def main():
         if faces is None:
             continue
 
-        print(get_emotion(faces, gray, emotion_model))
-        print(is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd))
+        present_emotion = get_emotion(faces, gray, emotion_model)
+        present_eye = is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd)
+
+        emotion_data[present_emotion] += 1
+        eye_data[present_eye] += 1
 
         cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.imshow("Study Cameet", frame)
         key = cv2.waitKey(33)
 
+        totalCheckCount += 1
+
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
+            print(emotion_data)
+            print(eye_data)
+            print(totalCheckCount)
             break
 
     capture.release()  # do a bit of cleanup
