@@ -170,7 +170,6 @@ def main():
             eyeClosedTime = 0
             FirstIter = False
             eyeClosed = False
-            now_time = time.time()
 
         if present_eye == 1:
             lastEyeOpenedTime = eyecheck_now
