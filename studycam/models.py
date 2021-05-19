@@ -28,3 +28,4 @@ class StudyLog(db.Model):
     rate_disgust = db.Column(db.Integer, nullable=False)
     rate_happy = db.Column(db.Integer, nullable=False)
     rate_sad = db.Column(db.Integer, nullable=False)
+    total_loop = db.Column(db.Integer, nullable=False)
