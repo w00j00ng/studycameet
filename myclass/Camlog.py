@@ -10,12 +10,14 @@ class Camlog():
         self.concentTrateTime = 0
         self.happyCount = 0
         self.disgustedCount = 0
+        self.sleepCount = 0
 
     def getData(self):
         return {
             "phoneCount": self.phoneCount,
             "happyCount": self.happyCount,
-            "disgustedCount": self.disgustedCount
+            "disgustedCount": self.disgustedCount,
+            "sleepCount": self.sleepCount
                 }
 
     def concentrate(self):
@@ -27,8 +29,11 @@ class Camlog():
     def notSeat(self):
         pass
 
-    def happyCount(self):
+    def happy(self):
         self.happyCount += 1
 
     def disgusted(self):
         self.disgustedCount += 1
+
+    def sleep(self):
+        self.sleepCount += 1

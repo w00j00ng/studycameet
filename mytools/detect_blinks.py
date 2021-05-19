@@ -31,9 +31,10 @@ def main():
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
 
     EYE_AR_THRESH = 0.27
-    EYE_AR_CONSEC_FRAMES = 2
-    COUNTER = 0
-    TOTAL = 0
+    SLEEP_STD_TIME = 5
+    bEyeOpened = True
+    bSleep = False
+    lastEyeClosedTime = 0
 
     SHAPE_PREDICTOR = f"{BASE_DIR}/mytools/shape_predictor_68_face_landmarks.dat"
 
@@ -57,17 +58,21 @@ def main():
         now_time = time.time()
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
         bbox, label, conf = cv.detect_common_objects(frame)
+
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         except cv2.error:
             break
         try:
             if 'person' not in label:
-                print('Not in seat')
+                # print('Not in seat')
                 continue
-            if 'cell phone' in label:
-                print('cell phone')
+            if 'cell phone' in label or 'remote' in label:
+                # print('cell phone')
+                pass
             rect = detector(gray, 0)[0]  # detect faces in the grayscale frame
+            print(rect)
+            print(type(rect))
             cambot_views.working()
 
             # determine the facial landmarks for the face region, then
@@ -85,19 +90,23 @@ def main():
             ear = (leftEAR + rightEAR) / 2.0  # average the eye aspect ratio together for both eyes
 
             # check to see if the eye aspect ratio is below the blink
-            if ear < EYE_AR_THRESH:
-                COUNTER += 1
-            else:
-                # if the eyes were closed for a sufficient number of
-                # then increment the total number of blinks
-                if COUNTER >= EYE_AR_CONSEC_FRAMES:
-                    TOTAL += 1
-                    cambot_views.blink()
-                COUNTER = 0
+            if ear < EYE_AR_THRESH:  # if eyes are closed
+                if bEyeOpened:
+                    lastEyeClosedTime = now_time
+                else:
+                    if lastEyeClosedTime > SLEEP_STD_TIME and not bSleep:
+                        print("sleep")
+                        bSleep = True
+                bEyeOpened = False
+            else:                    # if eyes are opened
+                lastEyeClosedTime = now_time
+                bEyeOpened = True
+                bSleep = False
 
         except IndexError:  # when no face is detected
-            print(label)
             print("Face is not straight")
+            if lastEyeClosedTime - now_time > 5:
+                lastEyeClosedTime = now_time
 
         cv2.putText(frame, "Press 'q' to Exit", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
