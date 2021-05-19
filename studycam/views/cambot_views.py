@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request
 from mytools import detecter_cam
 from threading import Thread
 from studycam import db
-from studycam.models import User_02
+from studycam.models import User
 from flask import session, g
 
 
@@ -15,7 +15,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User_02.query.get(user_id)
+        g.user = User.query.get(user_id)
 
 
 @bp.route('/', methods=['GET', 'POST'])

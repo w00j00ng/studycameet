@@ -1,7 +1,7 @@
 from studycam import db
 
 
-class User_02(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), nullable=False)
     password = db.Column(db.String(200), nullable=False)
@@ -9,27 +9,22 @@ class User_02(db.Model):
     div = db.Column(db.String(1), nullable=False)
 
 
-class Lecture_02(db.Model):
+class Lecture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     subject = db.Column(db.String(150), nullable=False)
     subject_number = db.Column(db.Integer, nullable=True)
 
 
-class StudentLog_02(db.Model):
+class StudyLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
     lecture_id = db.Column(db.Integer, nullable=False)
-    phone_count = db.Column(db.Integer, nullable=True)
-    emotion = db.Column(db.String(150), nullable=True)
-    operation_time = db.Column(db.Float, nullable=True)
-    study_time = db.Column(db.Float, nullable=True)
-
-
-class TeacherLog_02(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    lecture_id = db.Column(db.Integer, nullable=False)
-    lecture_part = db.Column(db.Integer, nullable=True)
-    phone_issue = db.Column(db.Integer, nullable=True)
-    concentrate_issue = db.Column(db.Float, nullable=True)
+    lecture_part = db.Column(db.Integer, nullable=False)
+    teacher_id = db.Column(db.Integer, nullable=False)
+    student_id = db.Column(db.Integer, nullable=False)
+    rate_posture = db.Column(db.Integer, nullable=False)
+    rate_concentrate = db.Column(db.Integer, nullable=False)
+    rate_angry = db.Column(db.Integer, nullable=False)
+    rate_disgust = db.Column(db.Integer, nullable=False)
+    rate_happy = db.Column(db.Integer, nullable=False)
+    rate_sad = db.Column(db.Integer, nullable=False)

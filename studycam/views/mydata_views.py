@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 from flask import session, g
-from studycam.models import User_02
+from studycam.models import User
 from studycam import db
-# from mytools.analyzer import GetGraph
+import pandas as pd
 
 
 bp = Blueprint('mydata', __name__, url_prefix='/mydata/')
@@ -14,7 +14,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User_02.query.get(user_id)
+        g.user = User.query.get(user_id)
 
 
 @bp.route('/')

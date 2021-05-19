@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 from flask import flash, session, g
 from studycam.forms import UserCreateForm, UserLoginForm
-from studycam.models import User_02
+from studycam.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from studycam import db
 import datetime
@@ -16,7 +16,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User_02.query.get(user_id)
+        g.user = User.query.get(user_id)
 
 
 @bp.route('/login/', methods=('GET', 'POST'))
@@ -24,7 +24,7 @@ def login():
     form = UserLoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         error = None
-        user = User_02.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if not user:
             error = "존재하지 않는 사용자입니다."
         elif not check_password_hash(user.password, form.password.data):
@@ -41,10 +41,10 @@ def login():
 def signup():
     form = UserCreateForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = User_02.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if not user:
             today_date = datetime.datetime.now().date()
-            user = User_02(
+            user = User(
                 username=form.username.data,
                 password=generate_password_hash(form.password1.data),
                 email=form.email.data,
