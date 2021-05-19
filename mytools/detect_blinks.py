@@ -60,7 +60,7 @@ def get_emotion(faces, gray, model):
         face_crop = face_crop.reshape(1, 48, 48, 1)
         result = model.predict(face_crop)
         result = list(result[0])
-        if max(result) > 0.8:
+        if max(result) > 0.9:
             emotion_index = result.index(max(result))
             return label_dict[emotion_index]
     except IndexError:
@@ -71,10 +71,6 @@ def get_emotion(faces, gray, model):
 
 
 def main():
-    capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라 또는 외장 카메라에서 영상을 받아오기
-    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # capture.set(option, n), 카메라의 속성을 설정
-    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
-
     SHAPE_PREDICTOR = f"{BASE_DIR}/mytools/shape_predictor_68_face_landmarks.dat"
 
     # initialize dlib's face detector (HOG-based) and then create
@@ -90,17 +86,73 @@ def main():
 
     emotion_model = load_model(f"{BASE_DIR}/mytools/model_optimal.h5")
 
+    capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라 또는 외장 카메라에서 영상을 받아오기
+    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # capture.set(option, n), 카메라의 속성을 설정
+    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
+
+    emotion_data = {
+        'Angry': 0,
+        'Disgust': 0,
+        'Fear': 0,
+        'Happy': 0,
+        'Neutral': 0,
+        'Sad': 0,
+        'Surprise': 0,
+        'No Emotion': 0,
+        'No Face': 0,
+        'Total': 0
+    }
+
+    eye_data = {
+        -1: 0,
+        0: 0,
+        1: 0
+    }
+
+    report_count = 0
+    loop_count = 0
+
+    REPORT_DURATION = 10
+
     # start the video stream thread
     # print("[INFO] starting video stream thread...")
     # print("[INFO] print q to quit...")
+    start_time = time.time()
 
     # loop over frames from the video stream
-    emotion_data = {'Angry' :0, 'Disgust': 0, 'Fear': 0, 'Happy': 0, 'Neutral': 0, 'Sad': 0, 'Surprise': 0, 'No Emotion': 0, 'No Face': 0}
-    eye_data = {-1: 0, 0: 0, 1: 0}
-    totalCheckCount = 0
-
     while True:
         now_time = time.time()
+
+        if now_time - start_time > REPORT_DURATION:
+            report_data = {
+                'report_count': report_count,
+                'emotion_data': emotion_data,
+                'eye_data': eye_data,
+                'loop_count': loop_count
+            }
+            if report_count > 0:
+                print(report_data)
+            start_time = now_time
+            report_count += 1
+
+            emotion_data = {
+                'Angry': 0,
+                'Disgust': 0,
+                'Fear': 0,
+                'Happy': 0,
+                'Neutral': 0,
+                'Sad': 0,
+                'Surprise': 0,
+                'No Emotion': 0,
+                'No Face': 0,
+            }
+            eye_data = {
+                -1: 0,
+                0: 0,
+                1: 0
+            }
+            loop_count = 0
+
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -116,6 +168,7 @@ def main():
         present_eye = is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd)
 
         emotion_data[present_emotion] += 1
+        loop_count += 1
         eye_data[present_eye] += 1
 
         cv2.putText(frame, "Press 'q' to Exit", (10, 30),
@@ -123,12 +176,7 @@ def main():
         cv2.imshow("Study Cameet", frame)
         key = cv2.waitKey(33)
 
-        totalCheckCount += 1
-
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
-            print(emotion_data)
-            print(eye_data)
-            print(totalCheckCount)
             break
 
     capture.release()  # do a bit of cleanup
