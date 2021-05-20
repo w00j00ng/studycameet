@@ -11,7 +11,8 @@
                             <th>토막</th>
                             <th>집중도</th>
                             <th>자세</th>
-                            <th>수강횟수</th>
+                            <th>날짜</th>
+                            <th>시간</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -20,13 +21,14 @@
                                 <td>{{ div }}</td>
                                 <td>{{ (rates['rate_posture'] * 100) | round(1)  }} %</td>
                                 <td>{{ (rates['rate_concentrate'] * 100) | round(1) }} %</td>
-                                <td>{{ rates['count'] }}</td>
+                                <td>{{ rates['date'] }}</td>
+                                <td>{{ rates['hour'] }} 시</td>
                             </tr>
                     {% endfor %}
                         <tr>
                             <td>평균</td>
-                            <td>{{ (avginfo[0] * 100) | round(1) }}</td>
-                            <td>{{ (avginfo[1] * 100) | round(1) }}</td>
+                            <td>{{ (avginfo[0] * 100) | round(1) }} %</td>
+                            <td>{{ (avginfo[1] * 100) | round(1) }} %</td>
                             <td></td>
                         </tr>
                     </tbody>

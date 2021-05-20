@@ -30,3 +30,5 @@ class StudyLog(db.Model):
     rate_happy = db.Column(db.Float, nullable=False)
     rate_sad = db.Column(db.Float, nullable=False)
     total_loop = db.Column(db.Integer, nullable=False)
+    create_date = db.Column(db.Date(), nullable=False)
+    create_time = db.Column(db.Integer, nullable=False)

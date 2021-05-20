@@ -4,6 +4,7 @@ from threading import Thread
 from studycam import db
 from studycam.models import User, StudyLog
 from flask import session, g
+import datetime as dt
 
 
 DEFAULT_LECTURE_ID = 1
@@ -73,7 +74,9 @@ def upload(report):
                           rate_fear=rate_fear,
                           rate_happy=rate_happy,
                           rate_sad=rate_sad,
-                          total_loop=total_loop
+                          total_loop=total_loop,
+                          create_date= dt.datetime.today(),
+                          create_time=dt.datetime.now().hour
                           )
     db.session.add(input_data)
 
