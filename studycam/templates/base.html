@@ -16,6 +16,10 @@
         <li class="nav-item ">
             <a class="nav-link" href="{{ url_for('teacher.index') }}">내 강의 데이터</a>
         </li>
+        {% elif g.user.div == '0' %}
+        <li class="nav-item ">
+            <a class="nav-link" href="{{ url_for('student.index') }}">내 학습 데이터</a>
+        </li>
         {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('cambot.index') }}">공부하기</a>
