@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="996e107b-6583-4578-9668-6742804f15c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/studycam/templates/student/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/studycam/templates/teacher/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/studycam/views/student_views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/studycam/views/teacher_views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/studycam/templates/teacher/total.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/studycam/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/studycam/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/studycam/views/teacher_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/views/teacher_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +22,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1shJw4G4z3G9mzqj8RUCLDow0aG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -37,6 +41,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
