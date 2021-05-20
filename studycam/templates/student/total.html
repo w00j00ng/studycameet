@@ -22,14 +22,6 @@
                                 <td>{{ (rates['rate_concentrate'] * 100) | round(1) }} %</td>
                                 <td>{{ rates['count'] }}</td>
                             </tr>
-                        {% if loop.last %}
-                            <tr>
-                                <td>평균</td>
-                                <td>{{ (rates['rate_posture'] * 100) | round(1) }} %</td>
-                                <td>{{ (rates['rate_posture'] * 100) | round(1) }} %</td>
-                                <td>#</td>
-                            </tr>
-                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
