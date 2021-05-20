@@ -23,6 +23,12 @@
                                 <td>{{ rates['count'] }}</td>
                             </tr>
                     {% endfor %}
+                        <tr>
+                            <td>평균</td>
+                            <td>{{ (avginfo[0] * 100) | round(1) }}</td>
+                            <td>{{ (avginfo[1] * 100) | round(1) }}</td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

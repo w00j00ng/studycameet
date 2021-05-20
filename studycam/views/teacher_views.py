@@ -41,5 +41,4 @@ def total():
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
         data_dict[row[0]][row[1]] = {'rate_posture': row[2], 'rate_concentrate': row[3], 'count': row[4]}
-    print(data_dict)
     return render_template('teacher/total.html', data=data_dict)

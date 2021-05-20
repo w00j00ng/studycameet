@@ -37,9 +37,13 @@ def total():
                              f"       , lecture_part "
                              f"ORDER BY id ")
     data_dict = {}
+    rownum, posture_sum, concentrate_sum = 0, 0, 0
     for row in data:
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
         data_dict[row[0]][row[1]] = {'rate_posture': row[2], 'rate_concentrate': row[3], 'count': row[4]}
-    print(data_dict)
-    return render_template('student/total.html', data=data_dict)
+        posture_sum += row[2]
+        concentrate_sum += row[3]
+        rownum += 1
+    avginfo = [posture_sum / rownum, concentrate_sum / rownum]
+    return render_template('student/total.html', data=data_dict, avginfo=avginfo, rownum=rownum)
