@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="996e107b-6583-4578-9668-6742804f15c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/studycam/templates/teacher/total.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pybo.db" beforeDir="false" afterPath="$PROJECT_DIR$/pybo.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/studycam/templates/teacher/total.html" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/templates/teacher/total.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/studycam/views/teacher_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/views/teacher_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,7 +50,7 @@
       <recent name="C:\Projects\cameetProject\mytools" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.teacher_views">
     <configuration name="detecter_cam" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="studycameet" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -71,8 +72,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="teacher_views" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="studycameet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/studycam/views" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/studycam/views/teacher_views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.teacher_views" />
         <item itemvalue="Python.detecter_cam" />
       </list>
     </recent_temporary>

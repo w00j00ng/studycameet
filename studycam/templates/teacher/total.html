@@ -1,4 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="col-md-8">
+    {% for lecture, div_data in data.items() %}
+        <div class="col-md-8">
+            <div class="post-form my-3 ml-3">
+                <h4>수업번호: {{ lecture }}</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>토막</th>
+                            <th>집중도</th>
+                            <th>자세</th>
+                            <th>학생수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for div, rates in div_data.items() %}
+                            <tr>
+                                <td>{{ div }}</td>
+                                <td>{{ (rates['rate_posture'] * 100) | round(1)  }} %</td>
+                                <td>{{ (rates['rate_concentrate'] * 100) | round(1) }} %</td>
+                                <td>{{ rates['count'] }}</td>
+                            </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}
