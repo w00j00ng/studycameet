@@ -26,6 +26,7 @@ class StudyLog(db.Model):
     rate_concentrate = db.Column(db.Float, nullable=False)
     rate_angry = db.Column(db.Float, nullable=False)
     rate_disgust = db.Column(db.Float, nullable=False)
+    rate_fear = db.Column(db.Float, nullable=False)
     rate_happy = db.Column(db.Float, nullable=False)
     rate_sad = db.Column(db.Float, nullable=False)
     total_loop = db.Column(db.Integer, nullable=False)

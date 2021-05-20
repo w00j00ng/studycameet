@@ -179,6 +179,7 @@ def main():
             eyeClosed = True
 
         emotion_data[present_emotion] += 1
+        emotion_data['Total'] += 1
         loop_count += 1
         eye_data[present_eye] += 1
 

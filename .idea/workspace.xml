@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="996e107b-6583-4578-9668-6742804f15c3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/studycameet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/studycameet.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/README" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/alembic.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/env.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/script.py.mako" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/versions/e65033fbe53c_.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytools/detecter_cam.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytools/detecter_cam.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pybo.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/studycam/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/studycam/views/cambot_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/studycam/views/cambot_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
