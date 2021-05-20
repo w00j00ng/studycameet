@@ -30,7 +30,9 @@ def total():
                              f"       , lecture_part "
                              f"       , rate_posture "
                              f"       , rate_concentrate "
-                             f"       , COUNT(*)"
+                             f"       , COUNT(*) "
+                             f"       , AVG(rate_posture) "
+                             f"       , AVG(rate_concentrate) "
                              f"FROM     study_log "
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY lecture_id "
@@ -40,6 +42,12 @@ def total():
     for row in data:
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
-        data_dict[row[0]][row[1]] = {'rate_posture': row[2], 'rate_concentrate': row[3], 'count': row[4]}
+        data_dict[row[0]][row[1]] = {
+            'rate_posture': row[2],
+            'rate_concentrate': row[3],
+            'count': row[4],
+            'avg_posture': row[5],
+            'avg_concentrate': row[6]
+        }
     print(data_dict)
     return render_template('student/total.html', data=data_dict)
