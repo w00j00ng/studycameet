@@ -12,29 +12,28 @@
     <a class="navbar-brand" href="{{url_for('main.index') }}">스터디캠잇</a>
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
         <ul class="navbar-nav">
+        {% if g.user.div == '1' %}
+        <li class="nav-item ">
+            <a class="nav-link" href="{{ url_for('teacher.index') }}">내 강의 데이터</a>
+        </li>
+        {% else %}
             <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('cambot.index') }}">공부하기</a>
+                <a class="nav-link" href="{{ url_for('cambot.index') }}">공부하기</a>
             </li>
-        </ul>
+        {% endif %}
         {% if g.user %}
-        <ul class="navbar-nav">
-            <li class="nav-item ">
-                <a class="nav-link" href="{{ url_for('mydata.index') }}">마이데이터</a>
-            </li>
             <li class="nav-item ">
                 <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
             </li>
-        </ul>
         {% else %}
-        <ul class="navbar-nav">
             <li class="nav-item ">
                 <a class="nav-link" href="{{ url_for('auth.signup') }}">계정생성</a>
             </li>
             <li class="nav-item ">
                 <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
             </li>
-        </ul>
         {% endif %}
+        </ul>
     </div>
 </nav>
 {% block content %}
