@@ -188,9 +188,7 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "Press 'q' to Exit", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, "Press 'q' to Exit", (10, 60),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"v << Move 5 seconds >> b", (10, 460),
+        cv2.putText(frame, f"v << Move 5 seconds >> b", (10, 410),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, f"n << Config Play Speed >> m", (10, 460),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
@@ -198,7 +196,6 @@ def main():
             cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (450, 460),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-        cv2.imshow("Study Cameet", frame)
         key = cv2.waitKey(33)
 
         if key == ord("p"):
@@ -209,9 +206,13 @@ def main():
                     break
 
         if key == ord("v"):
+            cv2.putText(frame, f"5 <<", (550, 410),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             start_time -= 5
 
         if key == ord("b"):
+            cv2.putText(frame, f">> 5", (550, 410),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             start_time += 5
 
         if key == ord("n"):
@@ -227,6 +228,8 @@ def main():
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
             cambot_views.commit_data()
             break
+
+        cv2.imshow("Study Cameet", frame)
 
     capture.release()  # do a bit of cleanup
     cv2.destroyAllWindows()
