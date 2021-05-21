@@ -30,7 +30,7 @@ def total():
                              f"       , lecture_part "
                              f"       , AVG(rate_posture) "
                              f"       , AVG(rate_concentrate) "
-                             f"       , COUNT(*)"
+                             f"       , COUNT(*) "
                              f"FROM     study_log "
                              f"WHERE    teacher_id = {session.get('user_id')} "
                              f"GROUP BY lecture_id "

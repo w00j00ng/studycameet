@@ -121,8 +121,8 @@ def main():
     # start the video stream thread
     # print("[INFO] starting video stream thread...")
     # print("[INFO] print q to quit...")
-    start_time = time.time()
-    lastEyeOpenedTime = start_time
+    last_report_time = time.time()
+    lastEyeOpenedTime = last_report_time
     FirstIter = True
     eyeClosed = False
 
@@ -130,7 +130,7 @@ def main():
     while True:
         now_time = time.time()
 
-        if now_time - start_time > REPORT_DURATION / play_speed:
+        if now_time - last_report_time > REPORT_DURATION / play_speed:
             report_data = {
                 'report_count': report_count,
                 'emotion_data': emotion_data,
@@ -139,13 +139,12 @@ def main():
                 'loop_count': loop_count
             }
             cambot_views.upload(report_data)
-            start_time = now_time
+            last_report_time = now_time
             report_count += 1
 
             emotion_data = dict.fromkeys(emotion_data, 0)
             eye_data = dict.fromkeys(eye_data, 0)
             loop_count = 0
-            totalClosedTime = 0
             eyeClosedTime = 0
 
         ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
@@ -203,7 +202,7 @@ def main():
             while True:
                 key = cv2.waitKey(33)
                 if key == ord("p"):
-                    start_time = time.time()
+                    last_report_time = time.time()
                     break
                 if key == ord("q"):
                     cambot_views.commit_data()
@@ -215,12 +214,12 @@ def main():
         if key == ord("v"):
             cv2.putText(frame, f"5 <<", (550, 410),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            start_time -= 5
+            last_report_time -= 5
 
         if key == ord("b"):
             cv2.putText(frame, f">> 5", (550, 410),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            start_time += 5
+            last_report_time += 5
 
         if key == ord("n"):
             play_speed -= 0.2

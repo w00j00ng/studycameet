@@ -35,7 +35,7 @@ def total():
                              f"FROM     study_log "
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY lecture_id "
-                             f"       , lecture_part"
+                             f"       , lecture_part "
                              f"       , create_date "
                              f"       , create_time "
                              f"ORDER BY id ")
