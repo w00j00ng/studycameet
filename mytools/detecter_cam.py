@@ -190,6 +190,8 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "Press 'q' to Exit", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"v << Move 5 seconds >> b", (10, 460),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, f"n << Config Play Speed >> m", (10, 460),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         if play_speed < 0.9 or play_speed > 1.1:
@@ -205,6 +207,12 @@ def main():
                 if key == ord("p"):
                     start_time = time.time()
                     break
+
+        if key == ord("v"):
+            start_time -= 5
+
+        if key == ord("b"):
+            start_time += 5
 
         if key == ord("n"):
             play_speed -= 0.2
