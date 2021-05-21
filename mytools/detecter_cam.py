@@ -190,10 +190,10 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "Press 'q' to Exit", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"n << Config Play Speed >> m", (10, 410),
+        cv2.putText(frame, f"n << Config Play Speed >> m", (10, 460),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        if play_speed != 1:
-            cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (10, 350),
+        if play_speed < 0.9 or play_speed > 1.1:
+            cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (450, 460),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
         cv2.imshow("Study Cameet", frame)
