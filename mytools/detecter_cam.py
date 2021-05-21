@@ -116,6 +116,7 @@ def main():
     loop_count = 0
 
     REPORT_DURATION = 10
+    play_speed = 1
 
     # start the video stream thread
     # print("[INFO] starting video stream thread...")
@@ -129,7 +130,7 @@ def main():
     while True:
         now_time = time.time()
 
-        if now_time - start_time > REPORT_DURATION:
+        if now_time - start_time > REPORT_DURATION / play_speed:
             report_data = {
                 'report_count': report_count,
                 'emotion_data': emotion_data,
@@ -187,6 +188,14 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "Press 'q' to Exit", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, "Press 'q' to Exit", (10, 60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"n << Config Play Speed >> m", (10, 410),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        if play_speed != 1:
+            cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (10, 350),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
         cv2.imshow("Study Cameet", frame)
         key = cv2.waitKey(33)
 
@@ -196,6 +205,16 @@ def main():
                 if key == ord("p"):
                     start_time = time.time()
                     break
+
+        if key == ord("n"):
+            play_speed -= 0.2
+            if play_speed < 0.4:
+                play_speed = 0.4
+
+        if key == ord("m"):
+            play_speed += 0.2
+            if play_speed > 2.0:
+                play_speed = 2.0
 
         if key == ord("q"):  # if the `q` key was pressed, break from the loop
             cambot_views.commit_data()
