@@ -199,11 +199,18 @@ def main():
         key = cv2.waitKey(33)
 
         if key == ord("p"):
+            quitChk = False
             while True:
                 key = cv2.waitKey(33)
                 if key == ord("p"):
                     start_time = time.time()
                     break
+                if key == ord("q"):
+                    cambot_views.commit_data()
+                    quitChk = True
+                    break
+            if quitChk:
+                break
 
         if key == ord("v"):
             cv2.putText(frame, f"5 <<", (550, 410),
