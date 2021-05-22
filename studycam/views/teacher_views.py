@@ -3,7 +3,6 @@ from flask import session, g
 from studycam.models import User
 from studycam import db
 from studycam.models import StudyLog
-import pandas as pd
 from sqlalchemy import and_
 
 
