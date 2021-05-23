@@ -454,20 +454,20 @@ class StudyLog(db.Model):
 
 ```python
 data = db.engine.execute(f"SELECT   lecture_id "
-                             f"       , lecture_part "
-                             f"       , AVG(rate_posture) "
-                             f"       , AVG(rate_concentrate) "
-                             f"       , AVG(rate_angry) "
-                             f"       , AVG(rate_disgust) "
-                             f"       , AVG(rate_fear) "
-                             f"       , AVG(rate_happy) "
-                             f"       , AVG(rate_sad) "
-                             f"       , COUNT(*) "
-                             f"FROM     study_log "
-                             f"WHERE    teacher_id = {session.get('user_id')} "
-                             f"GROUP BY lecture_id "
-                             f"       , lecture_part "
-                             f"ORDER BY id ")
+                         f"       , lecture_part "
+                         f"       , AVG(rate_posture) "
+                         f"       , AVG(rate_concentrate) "
+                         f"       , AVG(rate_angry) "
+                         f"       , AVG(rate_disgust) "
+                         f"       , AVG(rate_fear) "
+                         f"       , AVG(rate_happy) "
+                         f"       , AVG(rate_sad) "
+                         f"       , COUNT(*) "
+                         f"FROM     study_log "
+                         f"WHERE    teacher_id = {session.get('user_id')} "
+                         f"GROUP BY lecture_id "
+                         f"       , lecture_part "
+                         f"ORDER BY id ")
 ```
 
 - html 파일로 데이터 전송
