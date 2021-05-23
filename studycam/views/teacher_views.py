@@ -100,6 +100,11 @@ def bydate():
 def byweek():
     data = db.engine.execute(f"SELECT   AVG(rate_posture) "
                              f"       , AVG(rate_concentrate) "
+                             f"       , AVG(rate_angry) "
+                             f"       , AVG(rate_disgust) "
+                             f"       , AVG(rate_fear) "
+                             f"       , AVG(rate_happy) "
+                             f"       , AVG(rate_sad) "
                              f"       , strftime('%w', create_date) "
                              f"       , COUNT(*) "
                              f"FROM     study_log "
@@ -107,14 +112,34 @@ def byweek():
                              f"GROUP BY strftime('%w', create_date) "
                              f"ORDER BY strftime('%w', create_date) ")
     all_rows = [row for row in data]
+    report_data = []
+    for row in all_rows:
+        emotion_list = [row[2], row[3], row[4], row[5], row[6]]
+        emotion_label = ['스트레스', '우울', '불안', '행복', '슬픔']
+        emotion_rank = heapq.nlargest(2, range(len(emotion_list)), key=emotion_list.__getitem__)
+        report_data.append([
+            row[0], row[1],
+            emotion_label[emotion_rank[0]],
+            emotion_list[emotion_rank[0]],
+            emotion_label[emotion_rank[1]],
+            emotion_list[emotion_rank[1]],
+            0,
+            row[7],
+            row[8]
+        ])
     weekname = {"0": "월요일", "1": "화요일", "2": "수요일", "3": "목요일", "4": "금요일", "5": "토요일", "6": "일요일"}
-    return render_template('teacher/byweek.html', result=all_rows, weekname=weekname)
+    return render_template('teacher/byweek.html', report_data=report_data, weekname=weekname)
 
 
 @bp.route('/bytime/')
 def bytime():
     data = db.engine.execute(f"SELECT   AVG(rate_posture) "
                              f"       , AVG(rate_concentrate) "
+                             f"       , AVG(rate_angry) "
+                             f"       , AVG(rate_disgust) "
+                             f"       , AVG(rate_fear) "
+                             f"       , AVG(rate_happy) "
+                             f"       , AVG(rate_sad) "
                              f"       , create_time "
                              f"       , COUNT(*) "
                              f"FROM     study_log "
@@ -122,4 +147,19 @@ def bytime():
                              f"GROUP BY create_time "
                              f"ORDER BY create_time ")
     all_rows = [row for row in data]
-    return render_template('teacher/bytime.html', result=all_rows)
+    report_data = []
+    for row in all_rows:
+        emotion_list = [row[2], row[3], row[4], row[5], row[6]]
+        emotion_label = ['스트레스', '우울', '불안', '행복', '슬픔']
+        emotion_rank = heapq.nlargest(2, range(len(emotion_list)), key=emotion_list.__getitem__)
+        report_data.append([
+            row[0], row[1],
+            emotion_label[emotion_rank[0]],
+            emotion_list[emotion_rank[0]],
+            emotion_label[emotion_rank[1]],
+            emotion_list[emotion_rank[1]],
+            0,
+            row[7],
+            row[8]
+        ])
+    return render_template('teacher/bytime.html', result=report_data)
