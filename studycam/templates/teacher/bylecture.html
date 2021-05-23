@@ -22,10 +22,10 @@
                     {% for div, rates in div_data.items() %}
                             <tr>
                                 <td>{{ div }}</td>
-                                <td>{{ (rates['rate_posture'] * 100) | round(1)  }} %</td>
-                                <td>{{ (rates['rate_concentrate'] * 100) | round(1) }} %</td>
-                                <td>{{ rates['max_emotion'] }} ({{ (rates['max_emotion_rate'] * 100) | round(1)}} %)</td>
-                                <td>{{ rates['second_emotion'] }} ({{ (rates['second_emotion_rate'] * 100) | round(1)}} %)</td>
+                                <td>{{ rates['grade_posture'] }} ({{ (rates['rate_posture'] * 100) | round(1)  }}%)</td>
+                                <td>{{ rates['grade_concentrate'] }} ({{ (rates['rate_concentrate'] * 100) | round(1) }}%)</td>
+                                <td>{{ rates['max_emotion'] }} ({{ (rates['max_emotion_rate'] * 100) | round(1)}}%)</td>
+                                <td>{{ rates['second_emotion'] }} ({{ (rates['second_emotion_rate'] * 100) | round(1)}}%)</td>
                                 <td>{{ rates['count'] }}</td>
                             </tr>
                     {% endfor %}

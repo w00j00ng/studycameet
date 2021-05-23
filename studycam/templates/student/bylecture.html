@@ -20,15 +20,15 @@
                     {% for div, rates in div_data.items() %}
                             <tr>
                                 <td>{{ div }}</td>
-                                <td>{{ (rates['rate_posture'] * 100) | round(1)  }} %</td>
-                                <td>{{ (rates['rate_concentrate'] * 100) | round(1) }} %</td>
+                                <td>{{ rates['grade_posture'] }} ({{ (rates['rate_posture'] * 100) | round(1) }}%)</td>
+                                <td>{{ rates['grade_concentrate'] }} ({{ (rates['rate_concentrate'] * 100) | round(1)}}%)</td>
                                 <td>{{ rates['count'] }} 회</td>
                             </tr>
                     {% endfor %}
                         <tr>
                             <td>평균</td>
-                            <td>{{ (avginfo[0] * 100) | round(1) }} %</td>
-                            <td>{{ (avginfo[1] * 100) | round(1) }} %</td>
+                            <td>{{ avginfo[0] }} ({{ (avginfo[1] * 100) | round(1) }}%)</td>
+                            <td>{{ avginfo[2] }} ({{ (avginfo[3] * 100) | round(1) }}%)</td>
                             <td></td>
                         </tr>
                     </tbody>

@@ -41,13 +41,23 @@ def bylecture():
     for row in data:
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
-        data_dict[row[0]][row[1]] = {'rate_posture': row[2], 'rate_concentrate': row[3], 'count': row[4]}
+        data_dict[row[0]][row[1]] = {
+            'rate_posture': row[2],
+            'grade_posture': get_grade(row[2]),
+            'rate_concentrate': row[3],
+            'grade_concentrate': get_grade(row[3]),
+            'count': row[4]}
         posture_sum += row[2]
         concentrate_sum += row[3]
         rownum += 1
     if rownum == 0:
         return render_template('student/empty.html')
-    avginfo = [posture_sum / rownum, concentrate_sum / rownum]
+    avginfo = [
+        get_grade(posture_sum / rownum),
+        posture_sum / rownum,
+        get_grade(concentrate_sum / rownum),
+        concentrate_sum / rownum
+    ]
     return render_template('student/bylecture.html', data=data_dict, avginfo=avginfo, rownum=rownum)
 
 
@@ -60,8 +70,16 @@ def bydate():
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY create_date "
                              f"ORDER BY create_date ")
-    all_rows = [row for row in data]
-    return render_template('student/bydate.html', result=all_rows)
+    result = []
+    for row in data:
+        result.append([
+            get_grade(row[0]),
+            row[0],
+            get_grade(row[1]),
+            row[1],
+            row[2]
+        ])
+    return render_template('student/bydate.html', result=result)
 
 
 @bp.route('/byweek/')
@@ -73,9 +91,17 @@ def byweek():
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY strftime('%w', create_date) "
                              f"ORDER BY strftime('%w', create_date) ")
-    all_rows = [row for row in data]
     weekname = {"0": "월요일", "1": "화요일", "2": "수요일", "3": "목요일", "4": "금요일", "5": "토요일", "6": "일요일"}
-    return render_template('student/byweek.html', result=all_rows, weekname=weekname)
+    result = []
+    for row in data:
+        result.append([
+            get_grade(row[0]),
+            row[0],
+            get_grade(row[1]),
+            row[1],
+            weekname[row[2]]
+        ])
+    return render_template('student/byweek.html', result=result)
 
 
 @bp.route('/bytime/')
@@ -87,5 +113,28 @@ def bytime():
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY create_time "
                              f"ORDER BY create_time ")
-    all_rows = [row for row in data]
-    return render_template('student/bytime.html', result=all_rows)
+    result = []
+    for row in data:
+        result.append([
+            get_grade(row[0]),
+            row[0],
+            get_grade(row[1]),
+            row[1],
+            row[2]
+        ])
+    return render_template('student/bytime.html', result=result)
+
+
+def get_grade(rate):
+    grade = ""
+    if rate > 0.9:
+        grade = "아주좋음"
+    elif rate > 0.6:
+        grade = "좋음"
+    elif rate > 0.3:
+        grade = "보통"
+    elif rate > 0.1:
+        grade = "나쁨"
+    else:
+        grade = "아주나쁨"
+    return grade

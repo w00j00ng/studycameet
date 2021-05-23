@@ -16,9 +16,9 @@
                 <tbody>
                 {% for row in result %}
                     <tr>
-                        <td>{{weekname[row[2]]}}</td>
-                        <td>{{(row[0]* 100)| round(1)}} %</td>
-                        <td>{{(row[1]* 100)| round(1)}} %</td>
+                        <td>{{ row[4] }}</td>
+                        <td>{{ row[0] }} ({{(row[1]* 100)| round(1)}}%)</td>
+                        <td>{{ row[2] }} ({{(row[3]* 100)| round(1)}}%)</td>
                   </tr>
                 {% endfor %}
                 </tbody>
