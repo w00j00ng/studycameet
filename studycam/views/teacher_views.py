@@ -55,7 +55,9 @@ def total():
             'rate_posture': row[2],
             'rate_concentrate': row[3],
             'max_emotion': emotion_label[emotion_rank[0]],
+            'max_emotion_rate': emotion_list[emotion_rank[0]],
             'second_emotion': emotion_label[emotion_rank[1]],
+            'second_emotion_rate': emotion_list[emotion_rank[1]],
             'count': row[10]
         }
         rownum += 1
