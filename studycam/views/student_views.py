@@ -29,14 +29,11 @@ def total():
                              f"       , lecture_part "
                              f"       , rate_posture "
                              f"       , rate_concentrate "
-                             f"       , create_date "
-                             f"       , create_time "
+                             f"       , COUNT(*) "
                              f"FROM     study_log "
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY lecture_id "
                              f"       , lecture_part "
-                             f"       , create_date "
-                             f"       , create_time "
                              f"ORDER BY id ")
 
     data_dict = {}
@@ -44,7 +41,7 @@ def total():
     for row in data:
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
-        data_dict[row[0]][row[1]] = {'rate_posture': row[2], 'rate_concentrate': row[3], 'date': row[4], 'hour': row[5]}
+        data_dict[row[0]][row[1]] = {'rate_posture': row[2], 'rate_concentrate': row[3], 'count': row[4]}
         posture_sum += row[2]
         concentrate_sum += row[3]
         rownum += 1
