@@ -91,7 +91,7 @@ def byweek():
                              f"WHERE    student_id = {session.get('user_id')} "
                              f"GROUP BY strftime('%w', create_date) "
                              f"ORDER BY strftime('%w', create_date) ")
-    weekname = {"0": "월요일", "1": "화요일", "2": "수요일", "3": "목요일", "4": "금요일", "5": "토요일", "6": "일요일"}
+    weekname = {"0": "일요일", "1": "월요일", "2": "화요일", "3": "수요일", "4": "목요일", "5": "금요일", "6": "토요일"}
     result = []
     for row in data:
         result.append([
