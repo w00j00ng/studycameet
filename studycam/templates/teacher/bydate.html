@@ -13,7 +13,6 @@
                         <th>자세</th>
                         <th>주요 감정</th>
                         <th>부 감정</th>
-                        <th>수강횟수</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,7 +23,6 @@
                         <td>{{(row[2]* 100) | round(1)}} %</td>
                         <td>{{row[3]}} {{(row[4] * 100)| round(1)}} %</td>
                         <td>{{row[5]}} {{(row[6] * 100)| round(1)}} %</td>
-                        <td>{{row[7]}} 회</td>
                   </tr>
                 {% endfor %}
                 </tbody>

@@ -11,7 +11,6 @@
                         <th>시간</th>
                         <th>집중도</th>
                         <th>자세</th>
-                        <th>수강횟수</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,7 +19,6 @@
                         <td>{{row[2]}} 시</td>
                         <td>{{(row[0]* 100)| round(1)}} %</td>
                         <td>{{(row[1]* 100)| round(1)}} %</td>
-                        <td>{{row[3]}} 회</td>
                   </tr>
                 {% endfor %}
                 </tbody>

@@ -74,7 +74,6 @@ def bydate():
                              f"       , AVG(rate_fear) "
                              f"       , AVG(rate_happy) "
                              f"       , AVG(rate_sad) "
-                             f"       , COUNT(*) "
                              f"FROM     study_log "
                              f"WHERE    teacher_id = {session.get('user_id')} "
                              f"GROUP BY create_date "
@@ -89,8 +88,7 @@ def bydate():
             emotion_label[emotion_rank[0]],
             emotion_list[emotion_rank[0]],
             emotion_label[emotion_rank[1]],
-            emotion_list[emotion_rank[1]],
-            row[8]
+            emotion_list[emotion_rank[1]]
         ])
     print(report_data)
     return render_template('teacher/bydate.html', report_data=report_data)
@@ -106,7 +104,6 @@ def byweek():
                              f"       , AVG(rate_happy) "
                              f"       , AVG(rate_sad) "
                              f"       , strftime('%w', create_date) "
-                             f"       , COUNT(*) "
                              f"FROM     study_log "
                              f"WHERE    teacher_id = {session.get('user_id')} "
                              f"GROUP BY strftime('%w', create_date) "
@@ -124,8 +121,7 @@ def byweek():
             emotion_label[emotion_rank[1]],
             emotion_list[emotion_rank[1]],
             0,
-            row[7],
-            row[8]
+            row[7]
         ])
     weekname = {"0": "월요일", "1": "화요일", "2": "수요일", "3": "목요일", "4": "금요일", "5": "토요일", "6": "일요일"}
     return render_template('teacher/byweek.html', report_data=report_data, weekname=weekname)
@@ -141,7 +137,6 @@ def bytime():
                              f"       , AVG(rate_happy) "
                              f"       , AVG(rate_sad) "
                              f"       , create_time "
-                             f"       , COUNT(*) "
                              f"FROM     study_log "
                              f"WHERE    teacher_id = {session.get('user_id')} "
                              f"GROUP BY create_time "
@@ -159,7 +154,6 @@ def bytime():
             emotion_label[emotion_rank[1]],
             emotion_list[emotion_rank[1]],
             0,
-            row[7],
-            row[8]
+            row[7]
         ])
     return render_template('teacher/bytime.html', result=report_data)
