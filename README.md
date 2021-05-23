@@ -508,14 +508,11 @@ data = db.engine.execute(f"SELECT   lecture_id "
                          f"       , lecture_part "
                          f"       , rate_posture "
                          f"       , rate_concentrate "
-                         f"       , create_date "
-                         f"       , create_time "
+                         f"       , COUNT(*) "
                          f"FROM     study_log "
                          f"WHERE    student_id = {session.get('user_id')} "
                          f"GROUP BY lecture_id "
                          f"       , lecture_part "
-                         f"       , create_date "
-                         f"       , create_time "
                          f"ORDER BY id ")
 ```
 
