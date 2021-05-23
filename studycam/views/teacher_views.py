@@ -30,7 +30,6 @@ def total():
                              f"       , lecture_part "
                              f"       , AVG(rate_posture) "
                              f"       , AVG(rate_concentrate) "
-                             f"       , AVG(rate_concentrate) "
                              f"       , AVG(rate_angry) "
                              f"       , AVG(rate_disgust) "
                              f"       , AVG(rate_fear) "
@@ -41,14 +40,13 @@ def total():
                              f"WHERE    teacher_id = {session.get('user_id')} "
                              f"GROUP BY lecture_id "
                              f"       , lecture_part "
-                             f"       , student_id "
                              f"ORDER BY id ")
     data_dict = {}
     rownum = 0
     for row in data:
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
-        emotion_list = [row[5], row[6], row[7], row[8], row[9]]
+        emotion_list = [row[4], row[5], row[6], row[7], row[8]]
         emotion_label = ['스트레스', '우울', '불안', '행복', '슬픔']
         emotion_rank = heapq.nlargest(2, range(len(emotion_list)), key=emotion_list.__getitem__)
         data_dict[row[0]][row[1]] = {
@@ -58,7 +56,7 @@ def total():
             'max_emotion_rate': emotion_list[emotion_rank[0]],
             'second_emotion': emotion_label[emotion_rank[1]],
             'second_emotion_rate': emotion_list[emotion_rank[1]],
-            'count': row[10]
+            'count': row[9]
         }
         rownum += 1
     if rownum == 0:
