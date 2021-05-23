@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% block content %}
+{% include "student/navbar.html" %}
 <div class="col-md-8">
     {% for lecture, div_data in data.items() %}
         <div class="col-md-8">

@@ -20,15 +20,15 @@ def load_logged_in_user():
 
 @bp.route('/')
 def index():
-    return redirect(url_for('student.total'))
+    return redirect(url_for('student.bylecture'))
 
 
-@bp.route('/total/')
-def total():
+@bp.route('/bylecture/')
+def bylecture():
     data = db.engine.execute(f"SELECT   lecture_id "
                              f"       , lecture_part "
-                             f"       , rate_posture "
-                             f"       , rate_concentrate "
+                             f"       , AVG(rate_posture) "
+                             f"       , AVG(rate_concentrate) "
                              f"       , COUNT(*) "
                              f"FROM     study_log "
                              f"WHERE    student_id = {session.get('user_id')} "
@@ -48,4 +48,47 @@ def total():
     if rownum == 0:
         return render_template('student/empty.html')
     avginfo = [posture_sum / rownum, concentrate_sum / rownum]
-    return render_template('student/total.html', data=data_dict, avginfo=avginfo, rownum=rownum)
+    return render_template('student/bylecture.html', data=data_dict, avginfo=avginfo, rownum=rownum)
+
+
+@bp.route('/bydate/')
+def bydate():
+    data = db.engine.execute(f"SELECT   AVG(rate_posture) "
+                             f"       , AVG(rate_concentrate) "
+                             f"       , create_date "
+                             f"       , COUNT(*) "
+                             f"FROM     study_log "
+                             f"WHERE    student_id = {session.get('user_id')} "
+                             f"GROUP BY create_date "
+                             f"ORDER BY create_date ")
+    all_rows = [row for row in data]
+    return render_template('student/bydate.html', result=all_rows)
+
+
+@bp.route('/byweek/')
+def byweek():
+    data = db.engine.execute(f"SELECT   AVG(rate_posture) "
+                             f"       , AVG(rate_concentrate) "
+                             f"       , strftime('%w', create_date) "
+                             f"       , COUNT(*) "
+                             f"FROM     study_log "
+                             f"WHERE    student_id = {session.get('user_id')} "
+                             f"GROUP BY strftime('%w', create_date) "
+                             f"ORDER BY strftime('%w', create_date) ")
+    all_rows = [row for row in data]
+    weekname = {"0": "월요일", "1": "화요일", "2": "수요일", "3": "목요일", "4": "금요일", "5": "토요일", "6": "일요일"}
+    return render_template('student/byweek.html', result=all_rows, weekname=weekname)
+
+
+@bp.route('/bytime/')
+def bytime():
+    data = db.engine.execute(f"SELECT   AVG(rate_posture) "
+                             f"       , AVG(rate_concentrate) "
+                             f"       , create_time "
+                             f"       , COUNT(*) "
+                             f"FROM     study_log "
+                             f"WHERE    student_id = {session.get('user_id')} "
+                             f"GROUP BY create_time "
+                             f"ORDER BY create_time ")
+    all_rows = [row for row in data]
+    return render_template('student/bytime.html', result=all_rows)
