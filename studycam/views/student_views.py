@@ -46,7 +46,8 @@ def by_lecture():
             'grade_posture': get_grade(row[2]),
             'rate_concentrate': row[3],
             'grade_concentrate': get_grade(row[3]),
-            'count': row[4]}
+            'count': row[4]
+        }
         posture_sum += row[2]
         concentrate_sum += row[3]
         row_num += 1
