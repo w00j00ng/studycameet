@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 from mytools import detecter_cam
 from threading import Thread
 from studycam import db
@@ -64,22 +64,21 @@ def upload(report):
 
     total_loop = report['loop_count']
 
-    input_data = StudyLog(
-        lecture_id=lecture_id,
-        lecture_part=lecture_part,
-        teacher_id=teacher_id,
-        student_id=student_id,
-        rate_posture=rate_posture,
-        rate_concentrate=rate_concentrate,
-        rate_angry=rate_angry,
-        rate_disgust=rate_disgust,
-        rate_fear=rate_fear,
-        rate_happy=rate_happy,
-        rate_sad=rate_sad,
-        total_loop=total_loop,
-        create_date=dt.datetime.today(),
-        create_time=dt.datetime.now().hour
-    )
+    input_data = StudyLog(lecture_id=lecture_id,
+                          lecture_part=lecture_part,
+                          teacher_id=teacher_id,
+                          student_id=student_id,
+                          rate_posture=rate_posture,
+                          rate_concentrate=rate_concentrate,
+                          rate_angry=rate_angry,
+                          rate_disgust=rate_disgust,
+                          rate_fear=rate_fear,
+                          rate_happy=rate_happy,
+                          rate_sad=rate_sad,
+                          total_loop=total_loop,
+                          create_date= dt.datetime.today(),
+                          create_time=dt.datetime.now().hour
+                          )
     db.session.add(input_data)
 
     return redirect(url_for('cambot.index'))

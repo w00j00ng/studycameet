@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('mydata.index') }}">최근 데이터 보기</a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('mydata.bydate') }}">날짜별보기</a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('mydata.byweek') }}">요일별보기</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="col-md-8">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>날짜</th>
+                <th>이용 시간</th>
+                <th>작업 시간</th>
+                <th>작업 효율</th>
+                <th>1분 당 눈 깜박인 횟수</th>
+                <th>1분 당 경고 횟수</th>
+                <th>1분 당 알람 횟수</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in result %}
+            <tr>
+                <td>{{row[6]}}</td>
+                <td>{{row[0]|round(1, 'ceil')}} 분</td>
+                <td>{{row[1]|round(1, 'ceil')}} 분</td>
+                <td>{{row[2]|round(1, 'ceil')}} %</td>
+                <td>{{row[3]|round(1, 'ceil')}} 회</td>
+                <td>{{row[4]|round(1, 'ceil')}} 회</td>
+                <td>{{row[5]|round(1, 'ceil')}} 회</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

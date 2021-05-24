@@ -11,10 +11,20 @@ from keras.models import load_model
 
 
 def eye_aspect_ratio(eye):
-    left_vertical = dist.euclidean(eye[1], eye[5])
-    right_vertical = dist.euclidean(eye[2], eye[4])
-    horizontal = dist.euclidean(eye[0], eye[3])
-    return (left_vertical + right_vertical) / (2.0 * horizontal)
+    # compute the euclidean distances between the two sets of
+    # vertical eye landmarks (x, y)-coordinates
+    A = dist.euclidean(eye[1], eye[5])
+    B = dist.euclidean(eye[2], eye[4])
+
+    # compute the euclidean distance between the horizontal
+    # eye landmark (x, y)-coordinates
+    C = dist.euclidean(eye[0], eye[3])
+
+    # compute the eye aspect ratio
+    ear = (A + B) / (2.0 * C)
+
+    # return the eye aspect ratio
+    return ear
 
 
 def is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd):
@@ -26,12 +36,13 @@ def is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd):
     shape = predictor(gray, rect)
     shape = face_utils.shape_to_np(shape)
 
-    left_eye = shape[lStart:lEnd]
-    right_eye = shape[rStart:rEnd]
-    left_EAR = eye_aspect_ratio(left_eye)
-    right_EAR = eye_aspect_ratio(right_eye)
+    leftEye = shape[lStart:lEnd]
+    rightEye = shape[rStart:rEnd]
+    leftEAR = eye_aspect_ratio(leftEye)
+    rightEAR = eye_aspect_ratio(rightEye)
 
-    ear = (left_EAR + right_EAR) / 2.0
+    ear = (leftEAR + rightEAR) / 2.0  # average the eye aspect ratio together for both eyes
+    # check to see if the eye aspect ratio is below the blink
     if ear < EYE_AR_THRESH:
         return 0
     return 1
@@ -62,17 +73,22 @@ def get_emotion(faces, gray, model):
 def main():
     SHAPE_PREDICTOR = f"{BASE_DIR}/mytools/shape_predictor_68_face_landmarks.dat"
 
+    # initialize dlib's face detector (HOG-based) and then create
+    # the facial landmark predictor
+    # print("[INFO] loading facial landmark predictor...")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(SHAPE_PREDICTOR)
 
+    # grab the indexes of the facial landmarks for the left and
+    # right eye, respectively
     (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
 
     emotion_model = load_model(f"{BASE_DIR}/mytools/model_optimal.h5")
 
-    capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # 내장 카메라 또는 외장 카메라에서 영상을 받아오기
+    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # capture.set(option, n), 카메라의 속성을 설정
+    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # option: 프레임의 너비와 높이등의 속성을 설정, n: 너비와 높이의 값을 의미
 
     emotion_data = {
         'Angry': 0,
@@ -93,14 +109,24 @@ def main():
         1: 0
     }
 
+    totalClosedTime = 0
+    eyeClosedTime = 0
+
     report_count = 0
     loop_count = 0
 
     REPORT_DURATION = 10
     play_speed = 1
 
+    # start the video stream thread
+    # print("[INFO] starting video stream thread...")
+    # print("[INFO] print q to quit...")
     last_report_time = time.time()
+    lastEyeOpenedTime = last_report_time
+    FirstIter = True
+    eyeClosed = False
 
+    # loop over frames from the video stream
     while True:
         now_time = time.time()
 
@@ -109,6 +135,7 @@ def main():
                 'report_count': report_count,
                 'emotion_data': emotion_data,
                 'eye_data': eye_data,
+                'totalClosedTime': int(totalClosedTime),
                 'loop_count': loop_count
             }
             cambot_views.upload(report_data)
@@ -118,8 +145,9 @@ def main():
             emotion_data = dict.fromkeys(emotion_data, 0)
             eye_data = dict.fromkeys(eye_data, 0)
             loop_count = 0
+            eyeClosedTime = 0
 
-        ret, frame = capture.read()
+        ret, frame = capture.read()  # 카메라의 상태 및 프레임, ret은 카메라 상태 저장(정상 작동 True, 미작동 False)
         try:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         except cv2.error:
@@ -129,6 +157,26 @@ def main():
 
         present_emotion = get_emotion(faces, gray, emotion_model)
         present_eye = is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd)
+
+        eyecheck_now = time.time()
+
+        if FirstIter:
+            first_time = eyecheck_now
+            lastEyeOpenedTime = first_time
+            totalClosedTime = 0
+            eyeClosedTime = 0
+            FirstIter = False
+            eyeClosed = False
+
+        if present_eye == 1:
+            lastEyeOpenedTime = eyecheck_now
+            totalClosedTime += eyeClosedTime
+            eyeClosedTime = 0
+            eyeClosed = False
+        elif present_eye == 0:
+            if eyeClosed:
+                eyeClosedTime = eyecheck_now - lastEyeOpenedTime
+            eyeClosed = True
 
         emotion_data[present_emotion] += 1
         emotion_data['Total'] += 1
@@ -150,7 +198,7 @@ def main():
         key = cv2.waitKey(33)
 
         if key == ord("p"):
-            quit_chk = False
+            quitChk = False
             while True:
                 key = cv2.waitKey(33)
                 if key == ord("p"):
@@ -158,9 +206,9 @@ def main():
                     break
                 if key == ord("q"):
                     cambot_views.commit_data()
-                    quit_chk = True
+                    quitChk = True
                     break
-            if quit_chk:
+            if quitChk:
                 break
 
         if key == ord("v"):
