@@ -2,8 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for
 from flask import session, g
 from studycam.models import User
 from studycam import db
-from studycam.models import StudyLog
-from sqlalchemy import and_
 import heapq
 
 
@@ -21,28 +19,30 @@ def load_logged_in_user():
 
 @bp.route('/')
 def index():
-    return redirect(url_for('teacher.bylecture'))
+    return redirect(url_for('teacher.by_lecture'))
 
 
-@bp.route('/bylecture/')
-def bylecture():
-    data = db.engine.execute(f"SELECT   lecture_id "
-                             f"       , lecture_part "
-                             f"       , AVG(rate_posture) "
-                             f"       , AVG(rate_concentrate) "
-                             f"       , AVG(rate_angry) "
-                             f"       , AVG(rate_disgust) "
-                             f"       , AVG(rate_fear) "
-                             f"       , AVG(rate_happy) "
-                             f"       , AVG(rate_sad) "
-                             f"       , COUNT(*) "
-                             f"FROM     study_log "
-                             f"WHERE    teacher_id = {session.get('user_id')} "
-                             f"GROUP BY lecture_id "
-                             f"       , lecture_part "
-                             f"ORDER BY id ")
+@bp.route('/by_lecture/')
+def by_lecture():
+    data = db.engine.execute(
+        f"SELECT   lecture_id "
+        f"       , lecture_part "
+        f"       , AVG(rate_posture) "
+        f"       , AVG(rate_concentrate) "
+        f"       , AVG(rate_angry) "
+        f"       , AVG(rate_disgust) "
+        f"       , AVG(rate_fear) "
+        f"       , AVG(rate_happy) "
+        f"       , AVG(rate_sad) "
+        f"       , COUNT(*) "
+        f"FROM     study_log "
+        f"WHERE    teacher_id = {session.get('user_id')} "
+        f"GROUP BY lecture_id "
+        f"       , lecture_part "
+        f"ORDER BY id "
+    )
     data_dict = {}
-    rownum = 0
+    row_num = 0
     for row in data:
         if row[0] not in data_dict:
             data_dict[row[0]] = {}
@@ -60,14 +60,13 @@ def bylecture():
             'second_emotion_rate': emotion_list[emotion_rank[1]],
             'count': row[9]
         }
-        rownum += 1
-    if rownum == 0:
+        row_num += 1
+    if row_num == 0:
         return render_template('teacher/empty.html')
-    return render_template('teacher/bylecture.html', data=data_dict)
+    return render_template('teacher/by_lecture.html', data=data_dict)
 
 
 def get_grade(rate):
-    grade = ""
     if rate > 0.9:
         grade = "아주좋음"
     elif rate > 0.6:
