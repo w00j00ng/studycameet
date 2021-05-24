@@ -7,25 +7,25 @@
         <div class="col-md-8">
             <div class="post-form my-3 ml-3">
                 <h4>수업번호: {{ lecture_number }}</h4>
-                <table class="table table-striped">
+                <table class="table table-striped" style="width: 100%">
                     <thead>
                         <tr>
-                            <th>토막</th>
-                            <th>집중도</th>
-                            <th>자세</th>
-                            <th>주요 감정</th>
-                            <th>부 감정</th>
-                            <th>수강횟수</th>
+                            <th style="width: 15%;">토막</th>
+                            <th style="width: 15%;">집중도</th>
+                            <th style="width: 15%;">자세</th>
+                            <th style="width: 20%;">주요 감정</th>
+                            <th style="width: 15%;">부 감정</th>
+                            <th style="width: 20%;">수강횟수</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for part_number, value in lecture_info.items() %}
                         <tr>
                             <td>{{ part_number }}</td>
-                            <td>{{ value['grade_posture'] }} ({{ (value['rate_posture'] * 100) | round(1)  }}%)</td>
-                            <td>{{ value['grade_concentrate'] }} ({{ (value['rate_concentrate'] * 100) | round(1) }}%)</td>
-                            <td>{{ value['max_emotion'] }} ({{ (value['max_emotion_rate'] * 100) | round(1)}}%)</td>
-                            <td>{{ value['second_emotion'] }} ({{ (value['second_emotion_rate'] * 100) | round(1)}}%)</td>
+                            <td>{{ value['grade_posture'] }}<br>({{ (value['rate_posture'] * 100) | round(1)  }}%)</td>
+                            <td>{{ value['grade_concentrate'] }}<br>({{ (value['rate_concentrate'] * 100) | round(1) }}%)</td>
+                            <td>{{ value['max_emotion'] }}<br>({{ (value['max_emotion_rate'] * 100) | round(1)}}%)</td>
+                            <td>{{ value['second_emotion'] }}<br>({{ (value['second_emotion_rate'] * 100) | round(1)}}%)</td>
                             <td>{{ value['count'] }}</td>
                         </tr>
                     {% endfor %}
