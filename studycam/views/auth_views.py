@@ -57,7 +57,7 @@ def signup():
                 "email": form.email.data,
                 "create_date": today_date
             }
-            return render_template('auth/signupFinished.html', report_data=report_data)
+            return render_template('auth/signup_finished.html', report_data=report_data)
         else:
             flash('이미 존재하는 사용자입니다.')
             return redirect(url_for('auth.signup'))
