@@ -53,10 +53,10 @@ def get_emotion(faces, gray, model):
             emotion_index = result.index(max(result))
             return label_dict[emotion_index]
     except IndexError:
-        return "No Face"
+        return "No_Face"
     except cv2.error:
-        return "No Face"
-    return "No Emotion"
+        return "No_Face"
+    return "No_Emotion"
 
 
 def main():
@@ -82,8 +82,8 @@ def main():
         'Neutral': 0,
         'Sad': 0,
         'Surprise': 0,
-        'No Emotion': 0,
-        'No Face': 0,
+        'No_Emotion': 0,
+        'No_Face': 0,
         'Total': 0
     }
 
@@ -139,9 +139,9 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "Press 'q' to Exit", (10, 60),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"v << Move 5 seconds >> b", (10, 410),
+        cv2.putText(frame, "v << Move 5 Seconds >> b", (10, 410),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"n << Config Play Speed >> m", (10, 460),
+        cv2.putText(frame, "n << Config Play Speed >> m", (10, 460),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         if play_speed < 0.9 or play_speed > 1.1:
             cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (450, 460),
@@ -164,12 +164,12 @@ def main():
                 break
 
         if key == ord("v"):
-            cv2.putText(frame, f"5 <<", (550, 410),
+            cv2.putText(frame, "5 <<", (550, 410),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             last_report_time -= 5
 
         if key == ord("b"):
-            cv2.putText(frame, f">> 5", (550, 410),
+            cv2.putText(frame, ">> 5", (550, 410),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             last_report_time += 5
 
@@ -187,7 +187,7 @@ def main():
             cambot_views.commit_data()
             break
 
-        cv2.imshow("Study Cameet", frame)
+        cv2.imshow("Studycameet", frame)
 
     capture.release()  # do a bit of cleanup
     cv2.destroyAllWindows()

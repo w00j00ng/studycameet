@@ -50,9 +50,9 @@ def upload(report):
 
     if g.user:
         student_id = session.get('user_id')
-    if report['loop_count'] != report['emotion_data']['No Face']:
+    if report['loop_count'] != report['emotion_data']['No_Face']:
         rate_posture = (report['eye_data'][0] + report['eye_data'][1]) / \
-                       (report['loop_count'] - report['emotion_data']['No Face'])
+                       (report['loop_count'] - report['emotion_data']['No_Face'])
         rate_concentrate = 1 - report['eye_data'][0] / report['loop_count']
 
     if report['emotion_data']['Total'] != 0:
