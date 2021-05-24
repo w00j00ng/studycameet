@@ -41,15 +41,15 @@ def by_lecture():
         f"       , lecture_part "
         f"ORDER BY id "
     )
-    data_dict = {}
+    report = {}
     row_num = 0
     for row in data:
-        if row[0] not in data_dict:
-            data_dict[row[0]] = {}
+        if row[0] not in report:
+            report[row[0]] = {}
         emotion_list = [row[4], row[5], row[6], row[7], row[8]]
         emotion_label = ['스트레스', '우울', '불안', '행복', '슬픔']
         emotion_rank = heapq.nlargest(2, range(len(emotion_list)), key=emotion_list.__getitem__)
-        data_dict[row[0]][row[1]] = {
+        report[row[0]][row[1]] = {
             'rate_posture': row[2],
             'grade_posture': get_grade(row[2]),
             'rate_concentrate': row[3],
@@ -63,7 +63,7 @@ def by_lecture():
         row_num += 1
     if row_num == 0:
         return render_template('teacher/empty.html')
-    return render_template('teacher/by_lecture.html', data=data_dict)
+    return render_template('teacher/by_lecture.html', report=report)
 
 
 def get_grade(rate):

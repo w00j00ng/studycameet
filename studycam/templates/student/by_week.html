@@ -14,11 +14,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for row in result %}
+                {% for row in report %}
                     <tr>
-                        <td>{{ row[4] }}</td>
-                        <td>{{ row[0] }} ({{(row[1]* 100)| round(1)}}%)</td>
-                        <td>{{ row[2] }} ({{(row[3]* 100)| round(1)}}%)</td>
+                        <td>{{ row['weekday'] }}</td>
+                        <td>{{ row['grade_concentrate'] }} ({{( row['rate_concentrate'] * 100)| round(1) }}%)</td>
+                        <td>{{ row['grade_posture'] }} ({{( row['rate_posture'] * 100)| round(1) }}%)</td>
                   </tr>
                 {% endfor %}
                 </tbody>

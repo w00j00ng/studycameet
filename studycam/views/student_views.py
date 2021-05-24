@@ -26,8 +26,8 @@ def by_lecture():
     data = db.engine.execute(
         f"SELECT   lecture_id "
         f"       , lecture_part "
-        f"       , AVG(rate_posture) "
         f"       , AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
         f"       , COUNT(*) "
         f"FROM     study_log "
         f"WHERE    student_id = {session.get('user_id')} "
@@ -36,16 +36,16 @@ def by_lecture():
         f"ORDER BY id "
     )
 
-    data_dict = {}
+    report = {}
     row_num, posture_sum, concentrate_sum = 0, 0, 0
     for row in data:
-        if row[0] not in data_dict:
-            data_dict[row[0]] = {}
-        data_dict[row[0]][row[1]] = {
-            'rate_posture': row[2],
-            'grade_posture': get_grade(row[2]),
-            'rate_concentrate': row[3],
-            'grade_concentrate': get_grade(row[3]),
+        if row[0] not in report:
+            report[row[0]] = {}
+        report[row[0]][row[1]] = {
+            'rate_concentrate': row[2],
+            'grade_concentrate': get_grade(row[2]),
+            'rate_posture': row[3],
+            'grade_posture': get_grade(row[3]),
             'count': row[4]
         }
         posture_sum += row[2]
@@ -59,14 +59,14 @@ def by_lecture():
         get_grade(concentrate_sum / row_num),
         concentrate_sum / row_num
     ]
-    return render_template('student/by_lecture.html', data=data_dict, avg_info=avg_info)
+    return render_template('student/by_lecture.html', report=report, avg_info=avg_info)
 
 
 @bp.route('/by_date/')
 def by_date():
     data = db.engine.execute(
-        f"SELECT   AVG(rate_posture) "
-        f"       , AVG(rate_concentrate) "
+        f"SELECT   AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
         f"       , create_date "
         f"FROM     study_log "
         f"WHERE    student_id = {session.get('user_id')} "
@@ -75,21 +75,21 @@ def by_date():
     )
     result = []
     for row in data:
-        result.append([
-            get_grade(row[0]),
-            row[0],
-            get_grade(row[1]),
-            row[1],
-            row[2]
-        ])
+        result.append({
+            'grade_concentrate': get_grade(row[0]),
+            'rate_concentrate': row[0],
+            'grade_posture': get_grade(row[1]),
+            'rate_posture': row[1],
+            'create_date': row[2]
+        })
     return render_template('student/by_date.html', result=result)
 
 
 @bp.route('/by_week/')
 def by_week():
     data = db.engine.execute(
-        f"SELECT   AVG(rate_posture) "
-        f"       , AVG(rate_concentrate) "
+        f"SELECT   AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
         f"       , strftime('%w', create_date) "
         f"FROM     study_log "
         f"WHERE    student_id = {session.get('user_id')} "
@@ -97,39 +97,39 @@ def by_week():
         f"ORDER BY strftime('%w', create_date) "
     )
     week_name = {"0": "일요일", "1": "월요일", "2": "화요일", "3": "수요일", "4": "목요일", "5": "금요일", "6": "토요일"}
-    result = []
+    report = []
     for row in data:
-        result.append([
-            get_grade(row[0]),
-            row[0],
-            get_grade(row[1]),
-            row[1],
-            week_name[row[2]]
-        ])
-    return render_template('student/by_week.html', result=result)
+        report.append({
+            'grade_concentrate': get_grade(row[0]),
+            'rate_concentrate': row[0],
+            'grade_posture': get_grade(row[1]),
+            'rate_posture': row[1],
+            'weekday': week_name[row[2]]
+        })
+    return render_template('student/by_week.html', report=report)
 
 
 @bp.route('/by_time/')
 def by_time():
     data = db.engine.execute(
-        f"SELECT   AVG(rate_posture) "
-        f"       , AVG(rate_concentrate) "
+        f"SELECT   AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
         f"       , create_time "
         f"FROM     study_log "
         f"WHERE    student_id = {session.get('user_id')} "
         f"GROUP BY create_time "
         f"ORDER BY create_time "
     )
-    result = []
+    report = []
     for row in data:
-        result.append([
-            get_grade(row[0]),
-            row[0],
-            get_grade(row[1]),
-            row[1],
-            row[2]
-        ])
-    return render_template('student/by_time.html', result=result)
+        report.append({
+            'grade_concentrate': get_grade(row[0]),
+            'rate_concentrate': row[0],
+            'grade_posture': get_grade(row[1]),
+            'rate_posture': row[1],
+            'create_time': row[2]
+        })
+    return render_template('student/by_time.html', report=report)
 
 
 def get_grade(rate):

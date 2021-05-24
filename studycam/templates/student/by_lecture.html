@@ -3,10 +3,10 @@
 {% block content %}
 {% include "student/navbar.html" %}
 <div class="col-md-8">
-    {% for lecture, div_data in data.items() %}
+    {% for lecture_number, lecture_info in report.items() %}
         <div class="col-md-8">
             <div class="post-form my-3 ml-3">
-                <h4>수업번호: {{ lecture }}</h4>
+                <h4>수업번호: {{ lecture_number }}</h4>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -17,12 +17,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for div, rates in div_data.items() %}
+                    {% for part_number, value in lecture_info.items() %}
                             <tr>
-                                <td>{{ div }}</td>
-                                <td>{{ rates['grade_posture'] }} ({{ (rates['rate_posture'] * 100) | round(1) }}%)</td>
-                                <td>{{ rates['grade_concentrate'] }} ({{ (rates['rate_concentrate'] * 100) | round(1)}}%)</td>
-                                <td>{{ rates['count'] }} 회</td>
+                                <td>{{ part_number }}</td>
+                                <td>{{ value['grade_posture'] }} ({{ (value['rate_posture'] * 100) | round(1) }}%)</td>
+                                <td>{{ value['grade_concentrate'] }} ({{ (value['rate_concentrate'] * 100) | round(1)}}%)</td>
+                                <td>{{ value['count'] }} 회</td>
                             </tr>
                     {% endfor %}
                         <tr>
