@@ -7,7 +7,7 @@
 
 #### 참여자
 
-- 박예영 kitwoone67@naver.com
+- 박예영 twoone67@naver.com
 - 용우중 magoswj@gmail.com
 
 - 윤선미 yunseonmi97@naver.com
