@@ -127,6 +127,12 @@ def main():
 
         faces, confidences = cv.detect_face(frame)
 
+        for face in faces:
+            (startX, startY) = face[0], face[1]  # 시작위치 설정
+            (endX, endY) = face[2], face[3]  # 종료위치 설정
+            # draw rectangle over face
+            cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)  # 박스 그리기
+
         present_emotion = get_emotion(faces, gray, emotion_model)
         present_eye = is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd)
 
@@ -135,9 +141,24 @@ def main():
         loop_count += 1
         eye_data[present_eye] += 1
 
-        cv2.putText(frame, "Press 'p' to Pause", (10, 30),
+        posture_status = "Good"
+        concentrate_status = "Good"
+
+        if present_emotion == 'No_Face' or present_eye == -1:
+            posture_status = "Bad"
+            concentrate_status = "Bad"
+        elif present_eye == 0:
+            concentrate_status = "Bad"
+
+        cv2.putText(frame, "Press 'p' to Pause", (10, 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, "Press 'q' to Exit", (10, 60),
+        cv2.putText(frame, "Press 'q' to Exit", (10, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"Posture: {posture_status}", (10, 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"Concentrate: {concentrate_status}", (10, 100),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"Emotion: {present_emotion}", (10, 125),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "v << Move 5 Seconds >> b", (10, 410),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
