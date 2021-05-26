@@ -20,8 +20,8 @@
                     {% for part_number, value in lecture_info.items() %}
                             <tr>
                                 <td>{{ part_number }}</td>
-                                <td>{{ value['grade_posture'] }} ({{ (value['rate_posture'] * 100) | round(1) }}%)</td>
                                 <td>{{ value['grade_concentrate'] }} ({{ (value['rate_concentrate'] * 100) | round(1)}}%)</td>
+                                <td>{{ value['grade_posture'] }} ({{ (value['rate_posture'] * 100) | round(1) }}%)</td>
                                 <td>{{ value['count'] }} 회</td>
                             </tr>
                     {% endfor %}
