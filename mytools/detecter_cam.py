@@ -39,7 +39,7 @@ def is_eye_opened(detector, predictor, gray, lStart, lEnd, rStart, rEnd):
 
 
 def get_emotion(faces, gray, model):
-    label_dict = {0: 'Angry', 1: 'Disgust', 2: 'Fear', 3: 'Happy', 4: 'Neutral', 5: 'Sad', 6: 'Surprise'}
+    label_dict = { 0: 'Angry', 1: 'Disgust', 2: 'Fear', 3: 'Happy', 4: 'Neutral', 5: 'Sad', 6: 'Surprise' }
     try:
         face = faces[0]
         (startX, startY) = face[0], face[1]

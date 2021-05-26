@@ -40,7 +40,8 @@ def by_lecture():
         f"WHERE    teacher_id = {session.get('user_id')} "
         f"GROUP BY lecture_id "
         f"       , lecture_part "
-        f"ORDER BY id "
+        f"ORDER BY lecture_id "
+        f"       , lecture_part "
     )
     report = {}
     row_num = 0
