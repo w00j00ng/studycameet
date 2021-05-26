@@ -116,7 +116,7 @@ def main():
 
         part_time = now_time - last_report_time
 
-        if REPORT_DURATION - (part_time + part_time_modifier) * play_speed < 0:
+        if part_time * play_speed + part_time_modifier > REPORT_DURATION:
             report_data = {
                 'part_number': part_number,
                 'emotion_data': emotion_data,
@@ -172,18 +172,18 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, f"Emotion: {present_emotion}", (10, 125),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, "v << Move 5 Seconds >> b", (10, 435),
+        cv2.putText(frame, "k << Move 5 Seconds >> l", (10, 435),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, "n << Config Play Speed >> m", (10, 460),
+        cv2.putText(frame, "h << Config Play Speed >> j", (10, 460),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         if play_speed < 0.9 or play_speed > 1.1:
             cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (450, 460),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"{part_number} Part", (450, 50),
+        cv2.putText(frame, f"Part {part_number}", (450, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"Now at {strftime('%M:%S', gmtime(int(operation_time + operation_time_modifier)))}", (450, 25),
+        cv2.putText(frame, f"Now at {strftime('%M:%S', gmtime(int(part_number * REPORT_DURATION + part_time * play_speed + part_time_modifier)))}", (450, 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, f"Report in {round((REPORT_DURATION - (part_time + part_time_modifier) * play_speed), 1)}", (450, 75),
+        cv2.putText(frame, f"Report in {round(REPORT_DURATION - (part_time * play_speed + part_time_modifier), 1)}", (450, 75),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         key = cv2.waitKey(33)
 
@@ -201,8 +201,8 @@ def main():
             if quit_chk:
                 break
 
-        if key == ord("v"):
-            cv2.putText(frame, "5 <<", (550, 410),
+        if key == ord("k"):
+            cv2.putText(frame, "5 <<", (400, 435),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             operation_time_modifier -= 5
             part_time_modifier -= 5
@@ -210,8 +210,8 @@ def main():
                 part_time_modifier += REPORT_DURATION
                 part_number -= 1
 
-        if key == ord("b"):
-            cv2.putText(frame, ">> 5", (550, 410),
+        if key == ord("l"):
+            cv2.putText(frame, ">> 5", (400, 435),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             operation_time_modifier += 5
             part_time_modifier += 5
@@ -219,12 +219,12 @@ def main():
                 part_time_modifier -= REPORT_DURATION
                 part_number += 1
 
-        if key == ord("n"):
+        if key == ord("h"):
             play_speed -= 0.2
             if play_speed < 0.4:
                 play_speed = 0.4
 
-        if key == ord("m"):
+        if key == ord("j"):
             play_speed += 0.2
             if play_speed > 2.0:
                 play_speed = 2.0
