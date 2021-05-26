@@ -1,6 +1,7 @@
 from scipy.spatial import distance as dist
 from imutils import face_utils
 import time
+from time import strftime, gmtime
 import dlib
 import cv2
 import cvlib as cv
@@ -93,27 +94,38 @@ def main():
         1: 0
     }
 
-    report_count = 0
+    part_number = 0
     loop_count = 0
 
-    REPORT_DURATION = 10
+    REPORT_DURATION = 20
     play_speed = 1
 
     last_report_time = time.time()
 
+    b_first_iter = True
+    start_time = 0
+    operation_time_modifier = 0
+    part_time_modifier = 0
+
     while True:
         now_time = time.time()
+        if b_first_iter:
+            start_time = now_time
+            b_first_iter = False
+        operation_time = now_time - start_time
 
-        if now_time - last_report_time > REPORT_DURATION / play_speed:
+        part_time = now_time - last_report_time
+
+        if REPORT_DURATION - (part_time + part_time_modifier) * play_speed < 0:
             report_data = {
-                'report_count': report_count,
+                'part_number': part_number,
                 'emotion_data': emotion_data,
                 'eye_data': eye_data,
                 'loop_count': loop_count
             }
             cambot_views.upload(report_data)
             last_report_time = now_time
-            report_count += 1
+            part_number += 1
 
             emotion_data = dict.fromkeys(emotion_data, 0)
             eye_data = dict.fromkeys(eye_data, 0)
@@ -160,14 +172,19 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, f"Emotion: {present_emotion}", (10, 125),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        cv2.putText(frame, "v << Move 5 Seconds >> b", (10, 410),
+        cv2.putText(frame, "v << Move 5 Seconds >> b", (10, 435),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "n << Config Play Speed >> m", (10, 460),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         if play_speed < 0.9 or play_speed > 1.1:
             cv2.putText(frame, f"Play Speed x{round(play_speed, 1)}", (450, 460),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-
+        cv2.putText(frame, f"{part_number} Part", (450, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"Now at {strftime('%M:%S', gmtime(int(operation_time + operation_time_modifier)))}", (450, 25),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(frame, f"Report in {round((REPORT_DURATION - (part_time + part_time_modifier) * play_speed), 1)}", (450, 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         key = cv2.waitKey(33)
 
         if key == ord("p"):
@@ -187,12 +204,20 @@ def main():
         if key == ord("v"):
             cv2.putText(frame, "5 <<", (550, 410),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            last_report_time -= 5
+            operation_time_modifier -= 5
+            part_time_modifier -= 5
+            if part_time + part_time_modifier < 0:
+                part_time_modifier += REPORT_DURATION
+                part_number -= 1
 
         if key == ord("b"):
             cv2.putText(frame, ">> 5", (550, 410),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            last_report_time += 5
+            operation_time_modifier += 5
+            part_time_modifier += 5
+            if part_time + part_time_modifier > REPORT_DURATION:
+                part_time_modifier -= REPORT_DURATION
+                part_number += 1
 
         if key == ord("n"):
             play_speed -= 0.2

@@ -10,12 +10,13 @@
                 <table class="table table-striped" style="width: 100%">
                     <thead>
                         <tr>
-                            <th style="width: 15%;">토막</th>
-                            <th style="width: 15%;">집중도</th>
-                            <th style="width: 15%;">자세</th>
-                            <th style="width: 20%;">주요 감정</th>
-                            <th style="width: 15%;">부 감정</th>
-                            <th style="width: 20%;">수강횟수</th>
+                            <th style="width: 100px;">토막</th>
+                            <th style="width: 100px;">집중도</th>
+                            <th style="width: 100px;">자세</th>
+                            <th style="width: 200px;">주요 감정</th>
+                            <th style="width: 200px;">부 감정</th>
+                            <th style="width: 150px;">학생수</th>
+                            <th style="width: 150px;">수강횟수</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,6 +27,7 @@
                             <td>{{ value['grade_posture'] }}<br>({{ (value['rate_posture'] * 100) | round(1)  }}%)</td>
                             <td>{{ value['max_emotion'] }}<br>({{ (value['max_emotion_rate'] * 100) | round(1)}}%)</td>
                             <td>{{ value['second_emotion'] }}<br>({{ (value['second_emotion_rate'] * 100) | round(1)}}%)</td>
+                            <td>{{ value['student_count'] }}</td>
                             <td>{{ value['count'] }}</td>
                         </tr>
                     {% endfor %}

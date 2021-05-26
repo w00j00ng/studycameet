@@ -41,7 +41,7 @@ def execute():
 def upload(report):
     print(report)
     lecture_id = DEFAULT_LECTURE_ID
-    lecture_part = report['report_count']
+    lecture_part = report['part_number']
     teacher_id = DEFAULT_TEACHER_ID
     student_id = DEFAULT_STUDENT_ID
 
