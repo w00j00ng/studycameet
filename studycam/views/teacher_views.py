@@ -35,7 +35,6 @@ def by_lecture():
         f"       , AVG(rate_happy) "
         f"       , AVG(rate_sad) "
         f"       , COUNT (distinct student_id) "
-        f"       , COUNT(*) "
         f"FROM     study_log "
         f"WHERE    teacher_id = {session.get('user_id')} "
         f"GROUP BY lecture_id "
@@ -61,7 +60,6 @@ def by_lecture():
             'second_emotion': emotion_label[emotion_rank[1]],
             'second_emotion_rate': emotion_list[emotion_rank[1]],
             'student_count': row[9],
-            'count': row[10]
         }
         row_num += 1
     if row_num == 0:
