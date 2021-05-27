@@ -194,7 +194,7 @@ def main():
             if quit_chk:
                 break
 
-        if key == ord("K"):
+        if key == ord("k"):
             cv2.putText(frame, "5 <<", (400, 435),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             part_time_modifier -= 5
@@ -204,7 +204,7 @@ def main():
                 if part_number < 0:
                     part_number = 0
 
-        if key == ord("L"):
+        if key == ord("l"):
             cv2.putText(frame, ">> 5", (400, 435),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             part_time_modifier += 5
@@ -212,17 +212,17 @@ def main():
                 part_time_modifier -= REPORT_DURATION
                 part_number += 1
 
-        if key == ord("H"):
+        if key == ord("h"):
             play_speed -= 0.2
             if play_speed < 0.4:
                 play_speed = 0.4
 
-        if key == ord("J"):
+        if key == ord("j"):
             play_speed += 0.2
             if play_speed > 2.0:
                 play_speed = 2.0
 
-        if key == ord("Q"):  # if the `q` key was pressed, break from the loop
+        if key == ord("q"):  # if the `q` key was pressed, break from the loop
             cambot_views.commit_data()
             break
 
