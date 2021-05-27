@@ -80,6 +80,7 @@ def upload(report):
         create_time=dt.datetime.now().hour
     )
     db.session.add(input_data)
+    print("======================data added======================")
 
     return redirect(url_for('cambot.index'))
 
@@ -87,4 +88,5 @@ def upload(report):
 @bp.route('/commit_data/', methods=["POST"])
 def commit_data():
     db.session.commit()
+    print("======================data commited======================")
     return redirect(url_for('cambot.index'))

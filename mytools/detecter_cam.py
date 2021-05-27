@@ -102,17 +102,10 @@ def main():
 
     last_report_time = time.time()
 
-    b_first_iter = True
-    start_time = 0
-    operation_time_modifier = 0
     part_time_modifier = 0
 
     while True:
         now_time = time.time()
-        if b_first_iter:
-            start_time = now_time
-            b_first_iter = False
-        operation_time = now_time - start_time
 
         part_time = now_time - last_report_time
 
@@ -201,35 +194,35 @@ def main():
             if quit_chk:
                 break
 
-        if key == ord("k"):
+        if key == ord("K"):
             cv2.putText(frame, "5 <<", (400, 435),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            operation_time_modifier -= 5
             part_time_modifier -= 5
             if part_time + part_time_modifier < 0:
                 part_time_modifier += REPORT_DURATION
                 part_number -= 1
+                if part_number < 0:
+                    part_number = 0
 
-        if key == ord("l"):
+        if key == ord("L"):
             cv2.putText(frame, ">> 5", (400, 435),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            operation_time_modifier += 5
             part_time_modifier += 5
             if part_time + part_time_modifier > REPORT_DURATION:
                 part_time_modifier -= REPORT_DURATION
                 part_number += 1
 
-        if key == ord("h"):
+        if key == ord("H"):
             play_speed -= 0.2
             if play_speed < 0.4:
                 play_speed = 0.4
 
-        if key == ord("j"):
+        if key == ord("J"):
             play_speed += 0.2
             if play_speed > 2.0:
                 play_speed = 2.0
 
-        if key == ord("q"):  # if the `q` key was pressed, break from the loop
+        if key == ord("Q"):  # if the `q` key was pressed, break from the loop
             cambot_views.commit_data()
             break
 
