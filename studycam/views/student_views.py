@@ -138,9 +138,9 @@ def get_grade(rate):
         grade = "아주좋음"
     elif rate > 0.6:
         grade = "좋음"
-    elif rate > 0.3:
+    elif rate > 0.4:
         grade = "보통"
-    elif rate > 0.1:
+    elif rate > 0.2:
         grade = "나쁨"
     else:
         grade = "아주나쁨"
