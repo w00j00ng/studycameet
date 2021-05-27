@@ -72,7 +72,7 @@ def by_date():
         f"FROM     study_log "
         f"WHERE    student_id = {session.get('user_id')} "
         f"GROUP BY create_date "
-        f"ORDER BY create_date "
+        f"ORDER BY create_date desc"
     )
     result = []
     for row in data:
