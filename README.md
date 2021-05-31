@@ -560,7 +560,7 @@ def by_lecture():
   - 감정 정보는 제공하지 않습니다
 - 강의 / 토막별 정보
 
-![student_report](README\student_bylecture.png)
+![student_report](https://github.com/w00j00ng/studycameet/blob/main/README/student_bylecture.png?raw=true)
 
 ```python
 @bp.route('/by_lecture/')
@@ -607,7 +607,7 @@ def by_lecture():
 
 - 날짜별 정보
 
-![student_bydate](README\student_bydate.png)
+![student_bydate](https://github.com/w00j00ng/studycameet/blob/main/README/student_bydate.png?raw=true)
 
 ```python
 @bp.route('/by_date/')
@@ -635,7 +635,7 @@ def by_date():
 
 - 요일별 정보
 
-![student_byweekday](README\student_byweekday.png)
+![student_byweekday](https://github.com/w00j00ng/studycameet/blob/main/README/student_byweekday.png?raw=true)
 
 ```python
 @bp.route('/by_week/')
@@ -664,7 +664,7 @@ def by_week():
 
 - 시간별 정보
 
-![student_bytime](README\student_bytime.png)
+![student_bytime](https://github.com/w00j00ng/studycameet/blob/main/README/student_bytime.png?raw=true)
 
 ```python
 @bp.route('/by_time/')
@@ -696,7 +696,7 @@ def by_time():
 
 #### (1) 플로우차트
 
-![studycameet](README\chatbot_flowchart.png)
+![studycameet](https://github.com/w00j00ng/studycameet/blob/main/README/chatbot_flowchart.png?raw=true)
 
 
 
@@ -728,9 +728,9 @@ def by_time():
 - 동공의 크기, 홍채의 색에 구애받지 않고 결과를 도출할 수 있음
 - 6개 좌표에 대한 연산을 수행하기 때문에 연산 부담이 적음
 
-![img](README/blink_detection_6_landmarks.jpg)
+![img](https://github.com/w00j00ng/studycameet/blob/main/README/blink_detection_6_landmarks.jpg?raw=true)
 
-![img](README/blink_detection_equation.png)
+![img](https://github.com/w00j00ng/studycameet/blob/main/README/blink_detection_equation.png?raw=true)
 
 ##### ◎  한계점
 
