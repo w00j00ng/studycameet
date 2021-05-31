@@ -50,7 +50,7 @@
 
 ## 2. 공부하기
 
-![studycamlogic](.\studycamlogic.png)
+![studycamlogic](https://github.com/w00j00ng/studycameet/blob/main/README/studycamlogic.png?raw=true)
 
 #### (1) 이용방법
 
@@ -550,7 +550,7 @@ def by_lecture():
 
 - 출력결과
 
-![teacher_bylecture](.\teacher_bylecture.png)
+![teacher_bylecture](https://github.com/w00j00ng/studycameet/blob/main/README/teacher_bylecture.png?raw=true)
 
 #### (2) 학생
 
