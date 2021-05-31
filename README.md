@@ -9,8 +9,9 @@
 
 - 박예영 twoone67@naver.com
 - 용우중 magoswj@gmail.com
-
 - 윤선미 yunseonmi97@naver.com
+
+
 
 ## 1. 메뉴
 
@@ -49,13 +50,13 @@
 
 ## 2. 공부하기
 
+![studycamlogic](.\studycamlogic.png)
+
 #### (1) 이용방법
 
 - 프로그램은 while 루프를 돌 때마다 화면을 캡쳐하면서 동작합니다
 
 ```python
-import cv2
-
 while True:
     ret, frame = capture.read()
     #--------생략--------#
@@ -64,8 +65,8 @@ while True:
 
 - 버튼을 눌러 프로그램을 제어할 수 있습니다
   - q: 종료 / p: 일시정지
-  - v: 5초 앞으로 / b: 5초 뒤로
-  - n: 배속을 0.2 줄임 (최소 배속 0.4) / m :  배속을 0.2 늘림 (최대 배속 2.0)
+  - k: 5초 앞으로 / l: 5초 뒤로
+  - h: 배속을 0.2 줄임 (최소 배속 0.4) / j :  배속을 0.2 늘림 (최대 배속 2.0)
 
 #### (2) 종료 / 일시정지 기능
 
@@ -99,40 +100,53 @@ while True:
 ```
 
 #### (3) 재생속도, 앞으로가기/뒤로가기 기능
-- v, b를 누르면 5초 앞, 뒤로 갈 수 있습니다
+- k, l를 누르면 5초 앞, 뒤로 갈 수 있습니다
 
   - 보고 시간을 조정하는 방법으로 구현했습니다
   - 키를 누르면 화면에 5초 앞으로가기/뒤로가기 문자가 잠깐 표시됩니다
 
-  - v :  5초 앞으로 가기
-  - b :  5초 뒤로 가기
+  - k :  5초 앞으로 가기
+  - l :  5초 뒤로 가기
 
 ```python
-    now_time = time.time()
-    if now_time - last_report_time > REPORT_DURATION / play_speed:
+last_report_time = time.time()
+part_time_modifier = 0
+
+while True:
+	now_time = time.time()
+    part_time = now_time - last_report_time
+    if part_time * play_speed + part_time_modifier > REPORT_DURATION:
         #--------생략--------#
         cambot_views.upload(report_data)
         #--------생략--------#
         last_report_time = now_time    
     #--------생략--------#
     key = cv2.waitKey(33)
-    if key == ord("v"):
-        cv2.putText(frame, f"5 <<", (550, 410),
+    if key == ord("k"):
+        cv2.putText(frame, "5 <<", (400, 435),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        last_report_time -= 5
-    if key == ord("b"):
-        cv2.putText(frame, f">> 5", (550, 410),
+        part_time_modifier -= 5
+        if part_time + part_time_modifier < 0:
+            part_time_modifier += REPORT_DURATION
+            part_number -= 1
+            if part_number < 0:
+                part_number = 0
+    if key == ord("l"):
+        cv2.putText(frame, ">> 5", (400, 435),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        last_report_time += 5
+        part_time_modifier += 5
+        if part_time + part_time_modifier > REPORT_DURATION:
+            part_time_modifier -= REPORT_DURATION
+            part_number += 1
 ```
 
-- n, m을 누르면 강의 배속을 설정할 수 있습니다
+- h, j를 누르면 강의 배속을 설정할 수 있습니다
   - 보고주기를 조절하는 방법으로 구현했습니다
-  - n :  배속을 0.2 줄임 (최소 배속 0.4)
-  - m :  배속을 0.2 늘림 (최대 배속 2.0)
+  - h :  배속을 0.2 줄임 (최소 배속 0.4)
+  - j :  배속을 0.2 늘림 (최대 배속 2.0)
 
 ```python
-    if now_time - last_report_time > REPORT_DURATION / play_speed:
+    if part_time * play_speed + part_time_modifier > REPORT_DURATION:
         #--------생략--------#
         cambot_views.upload(report_data)
         #--------생략--------#
@@ -142,11 +156,12 @@ while True:
     #--------생략--------#
     key = cv2.waitKey(33)
     #--------생략--------#
-    if key == ord("n"):
+    if key == ord("h"):
         play_speed -= 0.2
         if play_speed < 0.4:
-           play_speed = 0.4
-    if key == ord("m"):
+            play_speed = 0.4
+
+    if key == ord("j"):
         play_speed += 0.2
         if play_speed > 2.0:
             play_speed = 2.0
@@ -258,10 +273,10 @@ def get_emotion(faces, gray, model):
             emotion_index = result.index(max(result))
             return label_dict[emotion_index]
     except IndexError:
-        return "No Face"
+        return "No_Face"
     except cv2.error:
-        return "No Face"
-    return "No Emotion"
+        return "No_Face"
+    return "No_Emotion"
 ```
 
 - 감정분석 결과를 데이터에 반영합니다
@@ -275,8 +290,8 @@ emotion_data = {
         'Neutral': 0,
         'Sad': 0,
         'Surprise': 0,
-        'No Emotion': 0,
-        'No Face': 0,
+        'No_Emotion': 0,
+        'No_Face': 0,
         'Total': 0
     }
 #--------생략--------#
@@ -300,8 +315,8 @@ while True:
         'Neutral': 25, 
         'Sad': 0, 
         'Surprise': 0, 
-        'No Emotion': 1, 
-        'No Face': 0, 
+        'No_Emotion': 1, 
+        'No_Face': 0, 
         'Total': 66
     }, 
     'eye_data': {
@@ -331,30 +346,35 @@ while True:
 ```python
 @bp.route('/upload/', methods=["POST"])
 def upload(report):
-    rate_posture, rate_concentrate = 0, 0
-    rate_angry, rate_disgust, rate_fear, rate_happy, rate_sad = 0, 0, 0, 0, 0 
     #--------생략--------#
-    if report['loop_count'] != report['emotion_data']['No Face']:
-        rate_posture = (report['eye_data'][0] + report['eye_data'][1]) / \
-                       (report['loop_count'] - report['emotion_data']['No Face'])
-        rate_concentrate = 1 - report['eye_data'][0] / report['loop_count']
+
+    rate_posture, rate_concentrate = 0, 0
+    rate_angry, rate_disgust, rate_fear, rate_happy, rate_sad = 0, 0, 0, 0, 0
+
+    if g.user:
+        student_id = session.get('user_id')
+    rate_posture = (report['eye_data'][0] + report['eye_data'][1]) / report['loop_count']
+    if (report['eye_data'][0] + report['eye_data'][1]) != 0:
+        rate_concentrate = report['eye_data'][1] / (report['eye_data'][0] + report['eye_data'][1])
     if report['emotion_data']['Total'] != 0:
         rate_angry = report['emotion_data']['Angry'] / report['emotion_data']['Total']
         rate_disgust = report['emotion_data']['Disgust'] / report['emotion_data']['Total']
         rate_fear = report['emotion_data']['Fear'] / report['emotion_data']['Total']
         rate_happy = report['emotion_data']['Happy'] / report['emotion_data']['Total']
         rate_sad = report['emotion_data']['Sad'] / report['emotion_data']['Total']
-	lecture_part = report['report_count']
+
     total_loop = report['loop_count']
-	#--------생략--------#
-    lecture_part = report['report_count']
+
+    #--------생략--------#
     db.session.add(input_data)
+    print("======================data added======================")
+
     return redirect(url_for('cambot.index'))
 ```
 
-- 자세는 (정면 얼굴이 검출된 횟수) / (얼굴이 검출된 횟수)를 통해 도출합니다
-- 집중도는 1 - (눈을 감고 있던 횟수) / (캡쳐 횟수)를 통해 도출합니다
-- 각 감정의 정도는 (해당 감정이 검출된 횟수) / (전체 감정이 검출된 횟수)로 도출합니다
+- 자세는 정면 얼굴이 검출된 횟수에서 전체 횟수를 나누어 도출합니다
+- 집중도는 눈을 뜨고 있는 횟수에서 정면 얼굴이 검출된 횟수를 나누어 도출합니다
+- 각 감정의 정도는 해당 감정이 측정된 횟수에서 전체 감정이 측정된 횟수를 나누어 도출합니다
 
 #### (8) 데이터 업데이트
 
@@ -446,6 +466,23 @@ class StudyLog(db.Model):
 
 ## 4. 마이 데이터 조회
 
+- 집중도와 자세를 구간화하여 등급을 나누고 결과를 출력합니다
+
+```python
+def get_grade(rate):
+    if rate > 0.9:
+        grade = "아주좋음"
+    elif rate > 0.6:
+        grade = "좋음"
+    elif rate > 0.4:
+        grade = "보통"
+    elif rate > 0.2:
+        grade = "나쁨"
+    else:
+        grade = "아주나쁨"
+    return grade
+```
+
 #### (1) 강사
 
 - SQL문
@@ -453,99 +490,213 @@ class StudyLog(db.Model):
   - 강의의 토막별 정보를 조회할 수 있습니다
 
 ```python
-data = db.engine.execute(f"SELECT   lecture_id "
-                         f"       , lecture_part "
-                         f"       , AVG(rate_posture) "
-                         f"       , AVG(rate_concentrate) "
-                         f"       , AVG(rate_angry) "
-                         f"       , AVG(rate_disgust) "
-                         f"       , AVG(rate_fear) "
-                         f"       , AVG(rate_happy) "
-                         f"       , AVG(rate_sad) "
-                         f"       , COUNT(*) "
-                         f"FROM     study_log "
-                         f"WHERE    teacher_id = {session.get('user_id')} "
-                         f"GROUP BY lecture_id "
-                         f"       , lecture_part "
-                         f"ORDER BY id ")
+@bp.route('/by_lecture/')
+def by_lecture():
+    data = db.engine.execute(
+        f"SELECT   lecture_id "
+        f"       , lecture_part "
+        f"       , AVG(posture) "
+        f"       , AVG(concentrate) "
+        f"       , AVG(angry) "
+        f"       , AVG(disgust) "
+        f"       , AVG(fear) "
+        f"       , AVG(happy) "
+        f"       , AVG(sad) "
+        f"       , COUNT (distinct student_id) "
+        f"FROM ( "
+        f"         SELECT   student_id "
+        f"                , lecture_id "
+        f"                , lecture_part "
+        f"                , AVG(rate_posture)     posture "
+        f"                , AVG(rate_concentrate) concentrate "
+        f"                , AVG(rate_angry)       angry "
+        f"                , AVG(rate_disgust)     disgust "
+        f"                , AVG(rate_fear)        fear "
+        f"                , AVG(rate_happy)       happy "
+        f"                , AVG(rate_sad)         sad "
+        f"         FROM     study_log "
+        f"         WHERE    teacher_id = {session.get('user_id')} "
+        f"         GROUP BY student_id "
+        f"                , lecture_id "
+        f"                , lecture_part "
+        f"     ) "
+        f"GROUP BY lecture_id "
+        f"       , lecture_part"
+    )
+    report = {}
+    row_num = 0
+    for row in data:
+        if row[0] not in report:
+            report[row[0]] = {}
+        emotion_list = [row[4], row[5], row[6], row[7], row[8]]
+        emotion_label = ['스트레스', '우울', '불안', '행복', '슬픔']
+        emotion_rank = heapq.nlargest(2, range(len(emotion_list)), key=emotion_list.__getitem__)
+        report[row[0]][row[1]] = {
+            'rate_posture': row[2],
+            'grade_posture': get_grade(row[2]),
+            'rate_concentrate': row[3],
+            'grade_concentrate': get_grade(row[3]),
+            'max_emotion': emotion_label[emotion_rank[0]],
+            'max_emotion_rate': emotion_list[emotion_rank[0]],
+            'second_emotion': emotion_label[emotion_rank[1]],
+            'second_emotion_rate': emotion_list[emotion_rank[1]],
+            'student_count': row[9],
+        }
+        row_num += 1
+    if row_num == 0:
+        return render_template('teacher/empty.html')
+    return render_template('teacher/by_lecture.html', report=report)
 ```
 
-- html 파일로 데이터 전송
+- 출력결과
 
-```python
-data_dict = {}
-rownum = 0
-for row in data:
-	if row[0] not in data_dict:
-		data_dict[row[0]] = {}
-    emotion_list = [row[4], row[5], row[6], row[7], row[8]]
-    emotion_label = ['스트레스', '우울', '불안', '행복', '슬픔']
-    emotion_rank = heapq.nlargest(2, range(len(emotion_list)), 
-                                  key=emotion_list.__getitem__)
-    data_dict[row[0]][row[1]] = {
-        'rate_posture': row[2],
-        'rate_concentrate': row[3],
-        'max_emotion': emotion_label[emotion_rank[0]],
-        'max_emotion_rate': emotion_list[emotion_rank[0]],
-        'second_emotion': emotion_label[emotion_rank[1]],
-        'second_emotion_rate': emotion_list[emotion_rank[1]],
-        'count': row[9]
-    }
-	rownum += 1
-if rownum == 0:
-	return render_template('teacher/empty.html')
-return render_template('teacher/total.html', data=data_dict)
-```
+![teacher_bylecture](.\teacher_bylecture.png)
 
 #### (2) 학생
 
 - SQL 문
   - 학생은 개별 정보를 조회할 수 있습니다
+  - 강의/토막별, 날짜별, 요일별, 시간별 통계정보를 제공합니다
   - 감정 정보는 제공하지 않습니다
+- 강의 / 토막별 정보
+
+![student_report](README\student_bylecture.png)
 
 ```python
-data = db.engine.execute(f"SELECT   lecture_id "
-                         f"       , lecture_part "
-                         f"       , rate_posture "
-                         f"       , rate_concentrate "
-                         f"       , COUNT(*) "
-                         f"FROM     study_log "
-                         f"WHERE    student_id = {session.get('user_id')} "
-                         f"GROUP BY lecture_id "
-                         f"       , lecture_part "
-                         f"ORDER BY id ")
-```
+@bp.route('/by_lecture/')
+def by_lecture():
+    data = db.engine.execute(
+        f"SELECT   lecture_id "
+        f"       , lecture_part "
+        f"       , AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
+        f"       , COUNT(*) "
+        f"FROM     study_log "
+        f"WHERE    student_id = {session.get('user_id')} "
+        f"GROUP BY lecture_id "
+        f"       , lecture_part "
+        f"ORDER BY lecture_id "
+        f"       , lecture_part "
+    )
 
-- html 파일로 데이터 전송
-
-```python
-data_dict = {}
-    rownum, posture_sum, concentrate_sum = 0, 0, 0
+    report = {}
+    row_num, posture_sum, concentrate_sum = 0, 0, 0
     for row in data:
-        if row[0] not in data_dict:
-            data_dict[row[0]] = {}
-        data_dict[row[0]][row[1]] = {
-            'rate_posture': row[2], 
-            'rate_concentrate': row[3],          
-            'date': row[4],          
-            'hour': row[5]
+        if row[0] not in report:
+            report[row[0]] = {}
+        report[row[0]][row[1]] = {
+            'rate_concentrate': row[2],
+            'grade_concentrate': get_grade(row[2]),
+            'rate_posture': row[3],
+            'grade_posture': get_grade(row[3]),
+            'count': row[4]
         }
         posture_sum += row[2]
         concentrate_sum += row[3]
-        rownum += 1
-    if rownum == 0:
+        row_num += 1
+    if row_num == 0:
         return render_template('student/empty.html')
-    avginfo = [posture_sum / rownum, concentrate_sum / rownum]
-    return render_template('student/total.html', data=data_dict, avginfo=avginfo, rownum=rownum)
+    avg_info = [
+        get_grade(posture_sum / row_num),
+        posture_sum / row_num,
+        get_grade(concentrate_sum / row_num),
+        concentrate_sum / row_num
+    ]
+    return render_template('student/by_lecture.html', report=report, avg_info=avg_info)
+```
+
+- 날짜별 정보
+
+![student_bydate](README\student_bydate.png)
+
+```python
+@bp.route('/by_date/')
+def by_date():
+    data = db.engine.execute(
+        f"SELECT   AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
+        f"       , create_date "
+        f"FROM     study_log "
+        f"WHERE    student_id = {session.get('user_id')} "
+        f"GROUP BY create_date "
+        f"ORDER BY create_date desc"
+    )
+    result = []
+    for row in data:
+        result.append({
+            'grade_concentrate': get_grade(row[0]),
+            'rate_concentrate': row[0],
+            'grade_posture': get_grade(row[1]),
+            'rate_posture': row[1],
+            'create_date': row[2]
+        })
+    return render_template('student/by_date.html', result=result)
+```
+
+- 요일별 정보
+
+![student_byweekday](README\student_byweekday.png)
+
+```python
+@bp.route('/by_week/')
+def by_week():
+    data = db.engine.execute(
+        f"SELECT   AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
+        f"       , strftime('%w', create_date) "
+        f"FROM     study_log "
+        f"WHERE    student_id = {session.get('user_id')} "
+        f"GROUP BY strftime('%w', create_date) "
+        f"ORDER BY strftime('%w', create_date) "
+    )
+    week_name = {"0": "일요일", "1": "월요일", "2": "화요일", "3": "수요일", "4": "목요일", "5": "금요일", "6": "토요일"}
+    report = []
+    for row in data:
+        report.append({
+            'grade_concentrate': get_grade(row[0]),
+            'rate_concentrate': row[0],
+            'grade_posture': get_grade(row[1]),
+            'rate_posture': row[1],
+            'weekday': week_name[row[2]]
+        })
+    return render_template('student/by_week.html', report=report)
+```
+
+- 시간별 정보
+
+![student_bytime](README\student_bytime.png)
+
+```python
+@bp.route('/by_time/')
+def by_time():
+    data = db.engine.execute(
+        f"SELECT   AVG(rate_concentrate) "
+        f"       , AVG(rate_posture) "
+        f"       , create_time "
+        f"FROM     study_log "
+        f"WHERE    student_id = {session.get('user_id')} "
+        f"GROUP BY create_time "
+        f"ORDER BY create_time "
+    )
+    report = []
+    for row in data:
+        report.append({
+            'grade_concentrate': get_grade(row[0]),
+            'rate_concentrate': row[0],
+            'grade_posture': get_grade(row[1]),
+            'rate_posture': row[1],
+            'create_time': row[2]
+        })
+    return render_template('student/by_time.html', report=report)
 ```
 
 
 
 ## 5. 챗봇
 
-#### (1) 목적
+#### (1) 플로우차트
 
-#### (2) 플로우차트
+![studycameet](README\chatbot_flowchart.png)
 
 
 
@@ -553,22 +704,62 @@ data_dict = {}
 
 #### (1) 눈 상태 분석
 
+##### ◎  개요
+
 - 출처
-  - https://www.pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/
+  https://www.pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/
+
 - 활용 라이브러리
-  - opencv, imutils, dlib
+  opencv, imutils, dlib
+
+- 얼굴 이미지를 분석하여 각 요소의 좌표값을 반환
+
+##### ◎  일반적인 모델의 특징과 한계
+
+- 눈을 인식하고 그 중 하얀 부분(흰자)이 사라지면 눈을 감은 것으로 인식하는 방법
+- 눈 부분에서 하얀 색을 띈 좌표값을 모두 도출해야 하기 때문에 연산 부담이 큼
+- 동공의 크기, 홍채의 색, 눈의 크기 차이에 대한 반영이 없어 신뢰도가 낮음
+
+##### ◎  적용 모델의 특징과 장점
+
+- 눈의 테두리에서 6개의 좌표 추출
+- 6개 좌표를 통해 눈의 세로 길이, 가로 길이를 도출
+- 세로 길이와 가로 길이의 비율에 따라 감긴 정도를 판단
+- 동공의 크기, 홍채의 색에 구애받지 않고 결과를 도출할 수 있음
+- 6개 좌표에 대한 연산을 수행하기 때문에 연산 부담이 적음
+
+![img](README/blink_detection_6_landmarks.jpg)
+
+![img](README/blink_detection_equation.png)
+
+##### ◎  한계점
+
+- 얼굴이 정면을 향해 있을 때만 연산 가능
+- 얼굴이 측면을 향해 있을 때 얼굴 각 요소의 좌표값을 확보할 필요가 있음
+
+
 
 #### (2) 감정 분석
 
-- 데이터셋
-  - 출처: 캐글 데이터셋
+- 방법론
+  - 캐글 감정 분석 데이터셋 활용
     - https://www.kaggle.com/aayushmishra1512/emotion-detector
-  - 48 * 48 흑백사진 19,338건 중 트레이닝 데이터셋 18,072건, 테스트 데이터셋 1,266건으로 구성
-  - 6개 감정으로 분류 (슬픔, 중립, 행복, 불안, 우울, 분노)
+    - 트레이닝 이미지 18,072건, 테스트 이미지 1,266건 활용
+  - 감정을 6개로 구분하고 각 사진에 레이블값 부여
+    - angry, disgusted, fearful, happy, sad, neutral
+  - 사진과 레이블값을 기준으로 학습시킴
+  - 컨볼루션 레이어, 백스풀링 레이어 활용
+    - 컨볼루션 레이어를 활용하여 지역적 특징 도출
+    - 맥스풀링 레이어를 활용하여 동일 지역에서의 사소한 변화를 무시
+- 선정이유
+  - 화면의 세부적인 요소까지 연산을 하게 되면 프로그램 성능이 낮아질 우려가 있음
+  - 지역적 특징을 활용한 연산을 통해 연산 부담을 줄임
 - 학습방법
   - keras 딥러닝 라이브러리 활용
   - epoch: 60 / batch_size: 64 / lr = 0.001
-
+- 발전 방향
+  - 현재의 방법은 사진을 바로 학습시켜 결과를 예측하는 모형으로 얼굴 각 요소에 대한 고려가 없음
+  - 얼굴에서 눈, 입, 코 등의 각 요소를 분석하여 감정을 도출하는 모델로 발전시킬 필요가 있음
 - 모델
 
 ```sh
@@ -630,23 +821,5 @@ Total params: 4,496,390
 Trainable params: 4,492,422
 Non-trainable params: 3,968
 _________________________________________________________________
-```
-
-- 학습결과
-  - 트레이닝 데이터셋에서 63.96% 정확도, 테스트 데이터셋에서 56.0% 정확도
-
-```sh
-Epoch 10/60
-283/283 [==============================] - 116s 409ms/step - loss: 1.8393 - accuracy: 0.5547 - val_loss: 2.0319 - val_accuracy: 0.4937
-Epoch 20/60
-283/283 [==============================] - 119s 418ms/step - loss: 1.7635 - accuracy: 0.5796 - val_loss: 1.7748 - val_accuracy: 0.5174
-Epoch 30/60
-283/283 [==============================] - 119s 418ms/step - loss: 1.5343 - accuracy: 0.6011 - val_loss: 1.5534 - val_accuracy: 0.5553
-Epoch 40/60
-283/283 [==============================] - 116s 409ms/step - loss: 1.4072 - accuracy: 0.6132 - val_loss: 1.5884 - val_accuracy: 0.5284
-Epoch 50/60
-283/283 [==============================] - 116s 408ms/step - loss: 1.3028 - accuracy: 0.6409 - val_loss: 1.4479 - val_accuracy: 0.5837
-Epoch 60/60
-283/283 [==============================] - 116s 408ms/step - loss: 1.3009 - accuracy: 0.6396 - val_loss: 1.5525 - val_accuracy: 0.5600
 ```
 
